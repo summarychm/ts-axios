@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "files": [
+    "./webpack.config.ts"
+  ],
+  "compilerOptions": {
+    "outDir": "../",
+    "sourceMap": false,
+    "inlineSourceMap": false,
+    "inlineSources": false
+  }
+}
