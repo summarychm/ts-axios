@@ -2,11 +2,8 @@ import path from "path";
 import webpack, { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
-console.log("============ process.env begin ====================");
-console.log(process.env);
-console.log("============ process.env end ======================");
 const config: webpack.Configuration = {
-	// mode: "development",
+	mode: "development",
 	entry: "./src/index.ts",
 	output: {
 		path: path.resolve(__dirname, "dist"),
