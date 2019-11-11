@@ -2,6 +2,8 @@ import path from "path";
 import webpack, { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
+import { apiRouter } from "./api";
+
 const config: webpack.Configuration = {
 	mode: "development",
 	entry: "./src/index.ts",
@@ -24,9 +26,7 @@ const config: webpack.Configuration = {
 		// 	},
 		// },
 		before(app) {
-			app.get("/api/user", function(req, res) {
-				res.json({ a: 1, b: 2 });
-			});
+			apiRouter(app);
 		},
 	},
 	externals: ["ts", "tsx", "js"],

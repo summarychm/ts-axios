@@ -1,5 +1,12 @@
-// import Axios from "axios";
+import axios from "axios";
 
-console.log("============ this begin ====================");
-console.log(this, 22234);
-console.log("============ this end ======================");
+console.log("111");
+
+axios({
+	method: "get",
+	url: "/api/user",
+	params: {
+		a: 1,
+		b: 2,
+	},
+});
