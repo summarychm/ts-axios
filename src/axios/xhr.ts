@@ -10,17 +10,23 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 		if (responseType) request.responseType = responseType;
 		if (timeout) request.timeout = timeout;
 
+		setRequestHeader(headers, data, request);
+
 		request.open(method.toUpperCase(), url, true);
-		// 批量设置requestHeaders
-		for (const [key, val] of Object.entries(headers)) {
-			if (data === null && key.toLowerCase() === "context-type") {
-				delete headers[key];
-			} else request.setRequestHeader(key, val);
-		}
 		request.onreadystatechange = () => {
 			if (request.readyState !== 4) return;
 			if (request.status === 0) return;
+			handleResponse(request);
+		};
+		request.send(data);
+		request.onerror = (e) => reject(createError("Network Error!" + e, config, null, request));
+		request.ontimeout = (e) => reject(createError(`Timeout of ${timeout}ms exceeded`, config, "ECONNABORTED", request));
 
+		/**
+		 * 构造response,并返回
+		 * @param request request对象
+		 */
+		function handleResponse(request: XMLHttpRequest) {
 			const responseHeaders = request.getAllResponseHeaders();
 			const responseData = responseType && responseType !== "text" ? request.response : request.responseText;
 			// 从request上构造response
@@ -32,16 +38,21 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 				config,
 				request,
 			};
-			handleResponse(response);
-		};
-
-		request.send(data);
-		request.onerror = (e) => reject(createError("Network Error!" + e, config, null, request));
-		request.ontimeout = (e) => reject(createError(`Timeout of ${timeout}ms exceeded`, config, "ECONNABORTED", request));
-
-		function handleResponse(response: AxiosResponse) {
 			if (response.status >= 200 && response.status < 300) resolve(response);
 			else reject(createError(`Request failed with status code ${response.status}`, config, null, request, response));
 		}
 	});
+	/**
+	 * 更新request的headers
+	 * @param headers configHeader
+	 * @param data configData
+	 * @param request ajax的request对象
+	 */
+	function setRequestHeader(headers: object, data: any, request: XMLHttpRequest) {
+		for (const [key, val] of Object.entries(headers)) {
+			if (data === null && key.toLowerCase() === "context-type") {
+				delete headers[key];
+			} else request.setRequestHeader(key, val);
+		}
+	}
 }
