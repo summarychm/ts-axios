@@ -1,4 +1,4 @@
-import { isDate, isObject } from "./util";
+import { isDate, isPlainObject } from "./util";
 
 const tools = {
 	/**
@@ -34,7 +34,7 @@ const tools = {
 				// 参数为Date类型 date.toISOString()
 				if (isDate(val)) val = val.toISOString();
 				// 参数为对象 /base/get?foo=%7B%22bar%22:%22baz%22%7D
-				else if (isObject(val)) val = JSON.stringify(val);
+				else if (isPlainObject(val)) val = JSON.stringify(val);
 				parts.push(`${tools.encode(key)}=${tools.encode(val)}`);
 			});
 		}

@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "./types/index";
 import { xhr } from "./xhr";
 import { buildURL } from "./helper/url";
+import { transformRequestData } from "./helper/data";
 
 function axios(config: AxiosRequestConfig) {
 	processConfig(config);
@@ -13,7 +14,12 @@ function axios(config: AxiosRequestConfig) {
  */
 function processConfig(config: AxiosRequestConfig): void {
 	config.url = transformUrl(config);
+	config.data = transformRequestData(config.data);
+	console.log("============ config.data begin ====================");
+	console.log(config.data);
+	console.log("============ config.data end ======================");
 }
+
 /**
  * 处理urlParams参数集合
  * @param config axiosConfig对象

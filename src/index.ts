@@ -2,7 +2,8 @@ import axios from "./axios/index";
 
 console.log("---begin--");
 
-paramsTest();
+// paramsTest();
+dataTest();
 
 function paramsTest() {
 	axios({
@@ -64,5 +65,24 @@ function paramsTest() {
 		params: {
 			bar: "baz",
 		},
+	});
+}
+
+function dataTest() {
+	axios({
+		method: "post",
+		url: "/base/post",
+		data: {
+			a: 1,
+			b: 2,
+		},
+	});
+
+	const arr = new Int32Array([21, 31]);
+
+	axios({
+		method: "post",
+		url: "/base/buffer",
+		data: arr,
 	});
 }
