@@ -3,7 +3,8 @@ import axios from "./axios/index";
 console.log("---begin--");
 
 // paramsTest();
-dataTest();
+// dataTest();
+headersTest();
 
 function paramsTest() {
 	axios({
@@ -84,5 +85,36 @@ function dataTest() {
 		method: "post",
 		url: "/base/buffer",
 		data: arr,
+	});
+}
+
+function headersTest() {
+	axios({
+		method: "post",
+		url: "/base/post",
+		data: {
+			a: 1,
+			b: 2,
+		},
+	});
+	axios({
+		method: "post",
+		url: "/base/post",
+		headers: {
+			"content-type": "application/json;charset=utf-8",
+		},
+		data: {
+			a: 1,
+			b: 2,
+		},
+	});
+
+	const paramsString = "q=URLUtils.searchParams&topic=api";
+	const searchParams = new URLSearchParams(paramsString);
+
+	axios({
+		method: "post",
+		url: "/base/post",
+		data: searchParams,
 	});
 }
