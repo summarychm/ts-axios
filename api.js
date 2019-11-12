@@ -27,6 +27,23 @@ function apiRouter(app) {
             res.json(buf.toJSON());
         });
     });
-    // return app;
+    app.get("/error/get", function (req, res) {
+        if (Math.random() > 0.5) {
+            res.json({
+                msg: "hello world",
+            });
+        }
+        else {
+            res.status(500);
+            res.end();
+        }
+    });
+    app.get("/error/timeout", function (req, res) {
+        setTimeout(function () {
+            res.json({
+                msg: "hello world",
+            });
+        }, 3000);
+    });
 }
 exports.apiRouter = apiRouter;
