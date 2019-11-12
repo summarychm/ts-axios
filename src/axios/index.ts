@@ -1,12 +1,12 @@
-import { AxiosRequestConfig, AxiosPromise } from "./types/index";
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from "./types/index";
 import { xhr } from "./xhr";
 import { buildURL } from "./helper/url";
-import { transformRequestData } from "./helper/data";
+import { transformRequestData, transformResponseData } from "./helper/data";
 import { transformRequestHeaders } from "./helper/headers";
 
 function axios(config: AxiosRequestConfig): AxiosPromise {
 	processConfig(config);
-	return xhr(config);
+	return xhr(config).then(processResponseData);
 }
 
 /**
@@ -46,6 +46,15 @@ function processRequestHeaders(config: AxiosRequestConfig) {
 
 	headers = transformRequestHeaders(headers, data);
 	config.headers = headers;
+}
+
+/**
+ * 规范话response
+ * @param res response
+ */
+function processResponseData(res: AxiosResponse) {
+	res.data = transformResponseData(res.data);
+	return res;
 }
 
 export default axios;
