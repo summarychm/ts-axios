@@ -2,7 +2,7 @@
 export type Method = "get" | "GET" | "delete" | "DELETE" | "head" | "HEAD" | "options" | "OPTIONS" | "post" | "POST" | "put" | "PUT" | "patch" | "PATCH";
 // axios RequestConfig
 export interface AxiosRequestConfig {
-	url?: string;
+	url: string;
 	method?: Method;
 	params?: any;
 	headers?: object;
@@ -16,7 +16,7 @@ export interface AxiosResponse {
 	data: any;
 	status: number;
 	statusText: string;
-	headers: string;
+	headers: object;
 	config: AxiosRequestConfig;
 	request: XMLHttpRequest;
 }

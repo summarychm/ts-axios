@@ -34,3 +34,18 @@ function autoSetContextType(headers: object, data: any): object {
 	}
 	return headers;
 }
+/**
+ * 将headers字符串转为对象
+ * @param headers responseHeaderStr
+ */
+export function parseHeaders(headers: string): object {
+	let parsed = Object.create(null);
+	if (!headers) return parsed;
+	headers.split("\r\n").forEach((str) => {
+		let [key, val] = str.split(":");
+		key = key.trim().toLowerCase();
+		if (!key) return;
+		if (val) parsed[key] = val.trim();
+	});
+	return parsed;
+}
