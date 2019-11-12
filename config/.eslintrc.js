@@ -22,5 +22,6 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
+        "no-param-reassign": 0
     }
 };

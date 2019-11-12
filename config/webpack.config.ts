@@ -29,11 +29,13 @@ const config: webpack.Configuration = {
 			apiRouter(app);
 		},
 	},
-	externals: ["ts", "tsx", "js"],
+	resolve: {
+		extensions: [".ts", ".tsx", ".js"],
+	},
 	module: {
 		rules: [
 			{
-				test: /.tsx?$/,
+				test: /.(tsx|ts)$/,
 				use: [
 					{
 						loader: "ts-loader",

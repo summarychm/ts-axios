@@ -4,6 +4,8 @@ export function apiRouter(app: Router) {
 	app.get("/api/user", function(req: Request, res: Response) {
 		res.json({ a: 1, b: 2 });
 	});
-
+	app.get("/base/get", function(req: Request, res: Response) {
+		res.json({ a: 1, b: 2 });
+	});
 	return app;
 }
