@@ -4,7 +4,8 @@ console.log("---begin--");
 
 // paramsTest();
 // dataTest();
-headersTest();
+// headersTest();
+responseDataTest();
 
 function paramsTest() {
 	axios({
@@ -116,5 +117,30 @@ function headersTest() {
 		method: "post",
 		url: "/base/post",
 		data: searchParams,
+	});
+}
+
+function responseDataTest() {
+	axios({
+		method: "post",
+		url: "/base/post",
+		data: {
+			a: 1,
+			b: 2,
+		},
+	}).then((res) => {
+		console.log(res);
+	});
+
+	axios({
+		method: "post",
+		url: "/base/post",
+		responseType: "json",
+		data: {
+			a: 3,
+			b: 4,
+		},
+	}).then((res) => {
+		console.log(res);
 	});
 }

@@ -6,19 +6,20 @@ export interface AxiosRequestConfig {
 	method?: Method;
 	params?: any;
 	headers?: object;
+	// 响应类型
 	responseType?: XMLHttpRequestResponseType;
 	data?: any;
 	timeout?: number;
 }
 
-export interface AxiosResponse<T = any> {
-	data: T;
+export interface AxiosResponse {
+	data: any;
 	status: number;
 	statusText: string;
-	headers: object;
+	headers: string;
 	config: AxiosRequestConfig;
 	request: XMLHttpRequest;
 }
-// export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
+export interface AxiosPromise extends Promise<AxiosResponse> {}
 
 // export type AxiosInterface = <T = any>(config: AxiosRequestConfig) => AxiosPromise<T>;

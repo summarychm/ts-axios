@@ -22,6 +22,7 @@ module.exports = {
         "@typescript-eslint"
     ],
     "rules": {
-        "no-param-reassign": 0
+        "no-param-reassign": 0,
+        "@typescript-eslint/no-empty-interface": 0
     }
 };
