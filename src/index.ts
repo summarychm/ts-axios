@@ -1,4 +1,4 @@
-import axios from "./axios/index";
+import axios, { AxiosError } from "./axios/index";
 
 console.log("---begin--");
 
@@ -6,7 +6,8 @@ console.log("---begin--");
 // dataTest();
 // headersTest();
 // responseDataTest();
-errorBaseTest();
+// errorBaseTest();
+errorEnhancerTest();
 
 function paramsTest() {
 	axios({
@@ -192,5 +193,19 @@ function errorBaseTest() {
 		})
 		.catch((e) => {
 			console.log(e.message);
+		});
+}
+function errorEnhancerTest() {
+	axios({
+		method: "get",
+		url: "/error/timeout",
+		timeout: 2000,
+	})
+		.then((res) => {
+			console.log(res);
+		})
+		.catch((e: AxiosError) => {
+			console.log(e.message);
+			console.log(e.code);
 		});
 }

@@ -58,7 +58,7 @@ function processResponseData(res: AxiosResponse) {
 }
 
 export default axios;
-
+export * from "./types";
 // function createInstance(): AxiosInterface {
 // 	const instance = new Axios();
 // 	return instance;

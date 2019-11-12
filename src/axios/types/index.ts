@@ -22,4 +22,15 @@ export interface AxiosResponse {
 }
 export interface AxiosPromise extends Promise<AxiosResponse> {}
 
+/**
+ * 对外界提供啊AxiosError类型注解
+ */
+export interface AxiosError extends Error {
+	config: AxiosRequestConfig;
+	code?: string;
+	request?: any;
+	response?: any;
+	isAxiosError: boolean;
+}
+
 // export type AxiosInterface = <T = any>(config: AxiosRequestConfig) => AxiosPromise<T>;
