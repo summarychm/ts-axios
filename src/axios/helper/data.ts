@@ -17,7 +17,7 @@ export function transformResponseData(data: any) {
 	try {
 		if (data.length > 0) data = JSON.parse(data);
 	} catch (error) {
-		console.error("transformResponseData Error", error);
+		// console.error("transformResponseData Error", error);
 	}
 	return data;
 }

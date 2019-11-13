@@ -1,17 +1,17 @@
 import { AxiosInstance } from "./types";
-import { AxiosPublicFnClass } from "./core/Axios";
+import Axios from "./core/Axios";
+import { extend } from "./helper/util";
 
 /**
  * 创建axios混合对象实例
  */
 function createInstance(): AxiosInstance {
-	const context = new AxiosPublicFnClass();
+	const context = new Axios();
 	// 因为request方法内部会用到axios实例,所以先绑定好this
-	const instance = AxiosPublicFnClass.prototype.request.bind(context);
+	const instance = Axios.prototype.request.bind(context);
 
-	// 将instance.prototype指向Axios.prototype,这样instance就可以直接工具方法了
-	// 或使用浅拷贝复制 extend(instance, context);
-	Object.setPrototypeOf(instance, AxiosPublicFnClass.prototype);
+	// 之所以不能使用Object.setPrototypeOf(instance, Axios.prototype)是因为 interceptors 存在于Axios实例中而不是其原型中.
+	extend(instance, context);
 	return instance as AxiosInstance;
 }
 const axios = createInstance();
