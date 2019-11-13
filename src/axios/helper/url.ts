@@ -42,8 +42,7 @@ const tools = {
 	},
 };
 
-/**
- * 将请求参数合并到url中
+/** 将请求参数合并到url中
  * @param url url地址
  * @param params 请求参数集合
  */

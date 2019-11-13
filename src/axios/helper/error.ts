@@ -17,8 +17,7 @@ export class AxiosError extends Error {
 	}
 }
 
-/**
- * 创建AxiosError的实例
+/** 创建AxiosError的实例
  * @param message 错误信息
  * @param config axiosConfig
  * @param code code

@@ -1,13 +1,14 @@
 import axios, { AxiosError } from "./axios/index";
 
-console.log("---begin--");
+console.log("---axios test begin--");
 
 // paramsTest();
 // dataTest();
 // headersTest();
 // responseDataTest();
 // errorBaseTest();
-errorEnhancerTest();
+// errorEnhancerTest();
+axiosInstanceTest();
 
 function paramsTest() {
 	axios({
@@ -208,4 +209,36 @@ function errorEnhancerTest() {
 			console.log(e.message);
 			console.log(e.code);
 		});
+}
+function axiosInstanceTest() {
+	// 常规调用
+	axios({
+		url: "/extend/post",
+		method: "post",
+		data: {
+			msg: "hi",
+		},
+	});
+	// 通过axios.request调用
+	axios.request({
+		url: "/extend/post",
+		method: "post",
+		data: {
+			msg: "hello",
+		},
+	});
+	// 通过工具方法调用
+	axios.get("/extend/get");
+
+	axios.options("/extend/options");
+
+	axios.delete("/extend/delete");
+
+	axios.head("/extend/head");
+
+	axios.post("/extend/post", { msg: "post" });
+
+	axios.put("/extend/put", { msg: "put" });
+
+	axios.patch("/extend/patch", { msg: "patch" });
 }

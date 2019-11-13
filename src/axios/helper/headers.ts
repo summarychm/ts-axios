@@ -11,8 +11,7 @@ function normalizeHeaderName(headers: object = {}, normalizedName: string) {
 	}
 }
 
-/**
- * 规范化RequestHeaders
+/** 规范化RequestHeaders
  * @param headers requestHeader
  * @param data requestData
  */
@@ -21,8 +20,7 @@ export function transformRequestHeaders(headers: object = {}, data: any): object
 	return headers;
 }
 
-/**
- * 如果data是plainObject且header未设置contextType,则补全contextType为json
+/** 如果data是plainObject且header未设置contextType,则补全contextType为json
  * @param headers requestHeaders
  * @param data requestData
  */
@@ -34,8 +32,7 @@ function autoSetContextType(headers: object, data: any): object {
 	}
 	return headers;
 }
-/**
- * 将headers字符串转为对象
+/** 将headers字符串转为对象
  * @param headers responseHeaderStr
  */
 export function parseHeaders(headers: string): object {
