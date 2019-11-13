@@ -24,7 +24,7 @@ function processConfig(config: AxiosRequestConfig): void {
  */
 function processRequestUrl(config: AxiosRequestConfig) {
 	const { url, params = {} } = config;
-	config.url = buildURL(url, params);
+	config.url = buildURL(url!, params);
 }
 
 /** 规范化RequestData对象

@@ -2,12 +2,21 @@
 
 ## Todo List
 
-[] 使用 TS 开发一版 axios,现实其绝大多数功能.  
-[x] 使用 TS 配置 webpackConfig,使用 tsc 先编译 webpack.config.ts,再运行 webpack-dev-server  
-[x] 使用 webpack-dev-server 的 beforeHook 实现 mock 功能  
-[x] 使用 eslint+gitCommitHook 来进行 tsCheck
+- [] 使用 TS 开发一版 axios,现实其绝大多数功能.
+  - [] 在浏览器端使用 XMLHttpRequest 对象通讯
+  - [] 支持 Promise API
+  - [] 支持请求和响应的拦截器
+  - [] 支持请求数据和响应数据的转换
+  - [] 支持请求的取消
+  - [] JSON 数据的自动转换
+  - [] 客户端防止 XSRF 攻击
+- [x] 使用 TS 配置 webpackConfig,
+  - [x] 使用 tsc 先编译 webpack.config.ts,
+  - [x] 再运行 webpack-dev-server
+- [x] 使用 webpack-dev-server 的 beforeHook 实现 mock 功能,省去搭建 server 步骤
+- [x] 使用 eslint+gitCommitHook 来进行 tsCheck
 
-## packageList
+## package List
 
 ```sh
 npm install -D typescript ts-node ts-loader
