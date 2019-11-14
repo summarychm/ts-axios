@@ -13,6 +13,7 @@ export interface AxiosRequestConfig {
 	transformRequest?: AxiosTransformer | AxiosTransformer[];
 	/** responseData预处理 */
 	transformResponse?: AxiosTransformer | AxiosTransformer[];
+	cancelToken?: CancelToken;
 }
 /**  转换resquest/response接口 */
 export type AxiosTransformer = (data: any, headers?: any) => any;
@@ -82,3 +83,13 @@ export interface AxiosInterceptor<T> {
 export type ResolvedFn<T = AxiosRequestConfig | AxiosResponse> = (val: T) => T | Promise<T>;
 /** 拦截失败回调 */
 export type RejectedFn = (error: any) => any;
+
+/** cancelToken实例接口 */
+export interface CancelToken {
+	promise: Promise<string>;
+	reason?: string;
+}
+/** cancel取消方法接口 */
+export type Canceler = (message?: string) => void;
+/** cancelToken类构造函数参数接口 */
+export type CancelExecutor = (cancel: Canceler) => void;

@@ -1,5 +1,4 @@
 import { AxiosRequestConfig, AxiosStatic } from "./types/index";
-import { AxiosInstance } from "./types";
 import Axios from "./core/Axios";
 import { extend } from "./helper/util";
 import defaults from "./defaults";

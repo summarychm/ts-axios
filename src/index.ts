@@ -1,5 +1,5 @@
 import qs from "qs";
-import axios, { AxiosError, AxiosTransformer } from "./axios/index";
+import axios, { AxiosError, AxiosTransformer, Canceler, Cancel } from "./axios/index";
 
 console.log("---axios test begin--");
 
@@ -13,7 +13,8 @@ console.log("---axios test begin--");
 // interceptorTest();
 // configTest();
 // transformReqResTest();
-axiosCreateTest();
+// axiosCreateTest();
+cancelTokenTest();
 
 function paramsTest() {
 	axios({
@@ -355,5 +356,46 @@ function axiosCreateTest() {
 		},
 	}).then((res) => {
 		console.log(res.data);
+	});
+}
+
+function cancelTokenTest() {
+	// const CancelToken = axios.CancelToken;
+	// const source = CancelToken.source();
+
+	// axios
+	// 	.get("/cancel/get", {
+	// 		cancelToken: source.token,
+	// 	})
+	// 	.catch(function(e) {
+	// 		if (axios.isCancel(e)) {
+	// 			console.log("Request canceled", e.message);
+	// 		}
+	// 	});
+
+	// setTimeout(() => {
+	// 	source.cancel("Operation canceled by the user.");
+
+	// 	axios.post("/cancel/post", { a: 1 }, { cancelToken: source.token }).catch(function(e) {
+	// 		if (axios.isCancel(e)) {
+	// 			console.log(e.message);
+	// 		}
+	// 	});
+	// }, 100);
+
+	let cancel: Canceler;
+
+	axios
+		.get("/cancel/get", {
+			cancelToken: new Cancel((c) => {
+				cancel = c;
+			}),
+		})
+		.catch(function(e) {
+			console.log("取消该请求", e);
+		});
+
+	setTimeout(() => {
+		cancel("测试取消");
 	});
 }
