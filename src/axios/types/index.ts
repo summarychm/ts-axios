@@ -13,11 +13,8 @@ export interface AxiosRequestConfig {
 	transformRequest?: AxiosTransformer | AxiosTransformer[];
 	/** responseData预处理 */
 	transformResponse?: AxiosTransformer | AxiosTransformer[];
-	cancelToken?: AxiosCancelToken;
+	cancelToken?: CancelTokenInstance;
 }
-/**  转换resquest/response接口 */
-export type AxiosTransformer = (data: any, headers?: any) => any;
-
 export interface AxiosResponse {
 	data: any;
 	status: number;
@@ -26,9 +23,6 @@ export interface AxiosResponse {
 	config: AxiosRequestConfig;
 	request: XMLHttpRequest;
 }
-// export interface AxiosPromise extends Promise<AxiosResponse> {}
-export type AxiosPromise = Promise<AxiosResponse>;
-
 export interface AxiosError extends Error {
 	config: AxiosRequestConfig;
 	code?: string;
@@ -36,9 +30,9 @@ export interface AxiosError extends Error {
 	response?: any;
 	isAxiosError: boolean;
 }
+export type AxiosPromise = Promise<AxiosResponse>;
 
-/** Axios的公共方法类
- */
+/** Axios的公共方法类 */
 export interface Axios {
 	interceptors: {
 		request: AxiosInterceptorManager<AxiosRequestConfig>;
@@ -59,14 +53,24 @@ export interface Axios {
 export interface AxiosInstance extends Axios {
 	(config: AxiosRequestConfig): AxiosPromise;
 }
-/** 创建新的Axios实例 */
+/** Axios实例接口 */
 export interface AxiosStatic extends AxiosInstance {
-	/**
-	 * 创建新的axios实例
+	/** CancelToken类接口 */
+	CancelToken: CancelTokenStatic;
+	/** CancelToken实例  */
+	Cancel: CancelStatic;
+	/**  */
+	isCancel: (value: any) => boolean;
+	/** 创建新的axios实例
 	 * @param config 新axios的配置参数
 	 */
 	create(config?: AxiosRequestConfig): AxiosInstance;
 }
+
+/**  转换resquest/response接口 */
+export type AxiosTransformer = (data: any, headers?: any) => any;
+
+/************* interceptor begin  ********/
 
 /** 拦截器管理类接口 */
 export interface AxiosInterceptorManager<T> {
@@ -83,13 +87,36 @@ export interface AxiosInterceptor<T> {
 export type ResolvedFn<T = AxiosRequestConfig | AxiosResponse> = (val: T) => T | Promise<T>;
 /** 拦截失败回调 */
 export type RejectedFn = (error: any) => any;
+/************* interceptor end  ********/
 
+/************* CancelToken begin  ********/
 /** cancelToken实例接口 */
-export interface AxiosCancelToken {
-	promise: Promise<string>;
-	reason?: string;
+export interface CancelTokenInstance {
+	promise: Promise<CancelInstance>;
+	reason?: CancelInstance;
+	/** 已cancel抛出报错 */
+	throwIfRequested(): void;
 }
 /** cancel取消方法接口 */
 export type Canceler = (message?: string) => void;
 /** cancelToken类构造函数参数接口 */
 export type CancelExecutor = (cancel: Canceler) => void;
+/** CacnelToken.source 方法的返回值接口  */
+export interface CancelTokenSource {
+	token: CancelTokenInstance;
+	cancel: Canceler;
+}
+/** CancelToken的类类型 */
+export interface CancelTokenStatic {
+	new (executor: CancelExecutor): CancelTokenInstance; //构造函数
+	source(): CancelTokenSource; // 静态source方法
+}
+/** cancel实例类型接口 */
+export interface CancelInstance {
+	message?: string;
+}
+/** Cancel类类型 */
+export interface CancelStatic {
+	new (message?: string): CancelInstance;
+}
+/************* CancelToken end  ********/

@@ -1,6 +1,6 @@
 import axios from "./axios";
-import CancelToken from "./cancel/CancelToken";
+import CancelTokenClass from "./cancel/CancelToken";
 
 export default axios;
 export * from "./types";
-export let Cancel = CancelToken;
+export let CancelToken = CancelTokenClass;

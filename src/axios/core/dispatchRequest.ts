@@ -5,6 +5,7 @@ import { flatterHeaders } from "../helper/headers";
 import transform from "./transform";
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+	throwIfCancellationRequested(config);
 	processConfig(config);
 	return xhr(config).then(transformResponseData);
 }
@@ -35,4 +36,14 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
 	// 调用预处理
 	res.data = transform(res.data, res.headers, res.config.transformResponse);
 	return res;
+}
+
+/**
+ * 检测cancelToken是否已经使用过了
+ * @param config axiosConfig
+ */
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+	if (config.cancelToken) {
+		config.cancelToken.throwIfRequested();
+	}
 }

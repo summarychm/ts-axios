@@ -1,5 +1,5 @@
 import qs from "qs";
-import axios, { AxiosError, AxiosTransformer, Canceler, Cancel } from "./axios/index";
+import axios, { AxiosError, AxiosTransformer, Canceler } from "./axios/index";
 
 console.log("---axios test begin--");
 
@@ -360,42 +360,44 @@ function axiosCreateTest() {
 }
 
 function cancelTokenTest() {
-	// const CancelToken = axios.CancelToken;
-	// const source = CancelToken.source();
+	const CancelToken = axios.CancelToken;
+	const source = CancelToken.source();
 
-	// axios
-	// 	.get("/cancel/get", {
-	// 		cancelToken: source.token,
-	// 	})
-	// 	.catch(function(e) {
-	// 		if (axios.isCancel(e)) {
-	// 			console.log("Request canceled", e.message);
-	// 		}
-	// 	});
+	axios
+		.get("/cancel/get", {
+			cancelToken: source.token,
+		})
+		.catch(function(e) {
+			if (axios.isCancel(e)) {
+				console.log("Request canceled", e.message);
+			}
+		});
 
-	// setTimeout(() => {
-	// 	source.cancel("Operation canceled by the user.");
+	setTimeout(() => {
+		source.cancel("Operation canceled by the user.");
 
-	// 	axios.post("/cancel/post", { a: 1 }, { cancelToken: source.token }).catch(function(e) {
-	// 		if (axios.isCancel(e)) {
-	// 			console.log(e.message);
-	// 		}
-	// 	});
-	// }, 100);
+		axios.post("/cancel/post", { a: 1 }, { cancelToken: source.token }).catch(function(e) {
+			if (axios.isCancel(e)) {
+				console.log("isCancel", e.message);
+			}
+		});
+	}, 100);
 
 	let cancel: Canceler;
 
 	axios
 		.get("/cancel/get", {
-			cancelToken: new Cancel((c) => {
+			cancelToken: new CancelToken((c) => {
 				cancel = c;
 			}),
 		})
 		.catch(function(e) {
-			console.log("取消该请求", e);
+			if (axios.isCancel(e)) {
+				console.log("Request canceled", e);
+			}
 		});
 
 	setTimeout(() => {
 		cancel("测试取消");
-	});
+	}, 200);
 }
