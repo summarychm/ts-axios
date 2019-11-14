@@ -9,7 +9,13 @@ export interface AxiosRequestConfig {
 	responseType?: XMLHttpRequestResponseType; // 响应类型
 	data?: any;
 	timeout?: number;
+	/** 请求发出前修改header */
+	transformRequest?: AxiosTransformer | AxiosTransformer[];
+	/** responseData预处理 */
+	transformResponse?: AxiosTransformer | AxiosTransformer[];
 }
+/**  转换resquest/response接口 */
+export type AxiosTransformer = (data: any, headers?: any) => any;
 
 export interface AxiosResponse {
 	data: any;
@@ -59,12 +65,12 @@ export interface AxiosInterceptorManager<T> {
 	use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number;
 	eject(id: number): void;
 }
-/** 拦截成功回调 */
-export type ResolvedFn<T = AxiosRequestConfig | AxiosResponse> = (val: T) => T | Promise<T>;
-/** 拦截失败回调 */
-export type RejectedFn = (error: any) => any;
 /** 拦截器实例接口对象 */
 export interface AxiosInterceptor<T> {
 	resolved: ResolvedFn<T>;
 	rejected: RejectedFn;
 }
+/** 拦截成功回调 */
+export type ResolvedFn<T = AxiosRequestConfig | AxiosResponse> = (val: T) => T | Promise<T>;
+/** 拦截失败回调 */
+export type RejectedFn = (error: any) => any;

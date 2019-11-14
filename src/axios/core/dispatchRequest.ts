@@ -1,54 +1,38 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from "../types/index";
 import { xhr } from "./xhr";
 import { buildURL } from "../helper/url";
-import { transformRequestData, transformResponseData } from "../helper/data";
-import { transformRequestHeaders, flatterHeaders } from "../helper/headers";
+import { flatterHeaders } from "../helper/headers";
+import transform from "./transform";
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
 	processConfig(config);
-	return xhr(config).then(processResponseData);
+	return xhr(config).then(transformResponseData);
 }
 
 /** 集中规范化处理config对象
  * @param config axiosConfig对象
  */
 function processConfig(config: AxiosRequestConfig): void {
-	processRequestUrl(config);
+	config.url = transformURL(config);
+	// 调用预处理函数
+	config.data = transform(config.data, config.headers, config.transformRequest);
 	// 因为规范化data时需要最新的headers所以先处理headers
-	processRequestHeaders(config);
-	processRequestData(config);
+	config.headers = flatterHeaders(config.headers, config.method); // 合并并剪除无用header
 }
 
 /** 处理urlParams参数集合
  * @param config axiosConfig对象
  */
-function processRequestUrl(config: AxiosRequestConfig) {
+function transformURL(config: AxiosRequestConfig): string {
 	const { url, params = {} } = config;
-	config.url = buildURL(url!, params);
-}
-
-/** 规范化RequestData对象
- * @param config axiosConfig对象
- */
-function processRequestData(config: AxiosRequestConfig) {
-	config.data = transformRequestData(config.data);
-}
-
-/** 规范化RequestHeaders对象
- * @param config axiosConfig对象
- */
-function processRequestHeaders(config: AxiosRequestConfig) {
-	let { headers, data } = config;
-
-	headers = transformRequestHeaders(headers, data);
-	headers = flatterHeaders(config.headers, config.method); // 合并并剪除无用header
-	config.headers = headers;
+	return buildURL(url!, params);
 }
 
 /** 规范化 AxiosResponse
  * @param res AxiosResponse
  */
-function processResponseData(res: AxiosResponse) {
-	res.data = transformResponseData(res.data);
+function transformResponseData(res: AxiosResponse): AxiosResponse {
+	// 调用预处理
+	res.data = transform(res.data, res.headers, res.config.transformResponse);
 	return res;
 }
