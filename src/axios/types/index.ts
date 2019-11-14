@@ -58,6 +58,14 @@ export interface Axios {
 export interface AxiosInstance extends Axios {
 	(config: AxiosRequestConfig): AxiosPromise;
 }
+/** 创建新的Axios实例 */
+export interface AxiosStatic extends AxiosInstance {
+	/**
+	 * 创建新的axios实例
+	 * @param config 新axios的配置参数
+	 */
+	create(config?: AxiosRequestConfig): AxiosInstance;
+}
 
 /** 拦截器管理类接口 */
 export interface AxiosInterceptorManager<T> {

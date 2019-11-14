@@ -3,10 +3,11 @@
 ## Todo List
 
 - [] 使用 TS 开发一版 axios,现实其绝大多数功能.
-  - [] 在浏览器端使用 XMLHttpRequest 对象通讯
-  - [] 支持 Promise API
-  - [] 支持请求和响应的拦截器
-  - [] 支持请求数据和响应数据的转换
+  - [x] 在浏览器端使用 XMLHttpRequest 对象通讯
+  - [x] 支持 Promise API
+  - [x] 支持请求和响应的拦截器
+  - [x] 支持请求数据和响应数据的转换
+  - [x] 支持 axios.create 创建新的 axios 实例
   - [] 支持请求的取消
   - [] JSON 数据的自动转换
   - [] 客户端防止 XSRF 攻击
