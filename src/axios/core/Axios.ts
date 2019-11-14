@@ -6,24 +6,21 @@ import { AxiosRequestConfig, AxiosPromise, Method } from "../types";
 import InterceptorManager from "./InterceptorManager";
 import dispatchRequest from "./dispatchRequest";
 
-/**
- * 拦截器实例集合接口
+/** 拦截器实例集合接口
  */
 interface AxiosInterceptors {
 	request: AxiosInterceptorManager<AxiosRequestConfig>;
 	response: AxiosInterceptorManager<AxiosResponse>;
 }
 
-/**
- * 拦截器执行链中单个chain接口
+/** 拦截器执行链中单个chain接口
  */
 interface AxiosPromiseChain {
 	resolved: ResolvedFn;
 	rejected?: RejectedFn;
 }
 
-/**
- * Axios的原型类,方便AxiosInstance扩展实用方法
+/** Axios的原型类,方便AxiosInstance扩展实用方法
  */
 export default class implements Axios {
 	interceptors: AxiosInterceptors;
@@ -34,25 +31,27 @@ export default class implements Axios {
 			response: new InterceptorManager<AxiosResponse>(),
 		};
 	}
+	/**
+	 * axiosRequestAjax
+	 * @param config AxiosConfig
+	 */
 	request(config: AxiosRequestConfig): AxiosPromise {
-		// 使用数组存储拦截器chain,通过遍历该数组实现以下的执行顺序
+		// chain[] 拦截器集合,通过遍历该数组实现一次循环,触发全部拦截器
 		// !  执行顺序: request拦截器  -> dispatchRequest  -> response拦截器
-
-		// 将dispatchRequest作为拦截器chain的初始项
+		// 将dispatchRequest作为拦截器chain 的初始项,利用while+promise实现链式调用
 		const chain: AxiosPromiseChain[] = [
 			{
 				resolved: dispatchRequest,
 				rejected: undefined,
 			},
 		];
-
 		// request拦截器,应为堆栈结构,所以使用unshift来模拟
 		this.interceptors.request.forEach((interceptor) => chain.unshift(interceptor));
 		// request拦截器,应为队列结构,所以直接使用push来模拟
 		this.interceptors.response.forEach((interceptor) => chain.push(interceptor));
-		let promise = Promise.resolve(config); // 将config作为param传入chain
+		let promise = Promise.resolve(config); // 将config作为初始param传入chain
 		while (chain.length) {
-			const { resolved, rejected } = chain.shift();
+			const { resolved, rejected } = chain.shift(); // 取出第一个chainItem
 			promise = promise.then(resolved, rejected); // 遍历
 		}
 		return promise as AxiosPromise;
@@ -80,8 +79,7 @@ export default class implements Axios {
 		return this._requestMethodWithData("patch", url, data, config);
 	}
 
-	/**
-	 * 基于method & url 构建config,调用request
+	/** 基于method & url 构建config,调用request
 	 * @param method 方法名
 	 * @param url 网址
 	 * @param config axiosConfig
@@ -90,8 +88,7 @@ export default class implements Axios {
 		const newConfig = Object.assign(config || {}, { method, url });
 		return this.request(newConfig);
 	}
-	/**
-	 * 基于method & url & data构建config,调用request
+	/** 基于method & url & data构建config,调用request
 	 * @param method 要调用的Method
 	 * @param url url
 	 * @param data requestData

@@ -8,8 +8,7 @@ export function isPlainObject(val: any): val is Object {
 	return toString.call(val) === "[object Object]";
 }
 
-/**
- * 将form自身及其原型上的属性和方法拷贝到to上
+/** 将form自身及其原型上的属性和方法拷贝到to上
  * @param to 接收方
  * @param form 发送发
  */

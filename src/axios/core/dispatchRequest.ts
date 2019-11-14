@@ -44,8 +44,8 @@ function processRequestHeaders(config: AxiosRequestConfig) {
 	config.headers = headers;
 }
 
-/** 规范话response
- * @param res response
+/** 规范化 AxiosResponse
+ * @param res AxiosResponse
  */
 function processResponseData(res: AxiosResponse) {
 	res.data = transformResponseData(res.data);

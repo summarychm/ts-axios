@@ -46,29 +46,23 @@ export interface Axios {
 	put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise;
 	patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise;
 }
-/** axios混合对象接口(自身实现request+挂载Axios.prototype的公共方法)
+/** axios混合对象接口(自身实现request+挂载Axios.prototype的公共属性和方法)
  */
 export interface AxiosInstance extends Axios {
 	(config: AxiosRequestConfig): AxiosPromise;
 }
 
-/**
- * 拦截器管理类接口
- */
+/** 拦截器管理类接口 */
 export interface AxiosInterceptorManager<T> {
-	// forEach(fn: (interceptor: AxiosInterceptor<T>) => void)
 	forEach(fn: (interceptor: AxiosInterceptor<T>) => void);
 	use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number;
 	eject(id: number): void;
 }
-/**
- * T 可能为 AxiosRequestConfig | AxiosResponse
- */
+/** 拦截成功回调 */
 export type ResolvedFn<T = AxiosRequestConfig | AxiosResponse> = (val: T) => T | Promise<T>;
+/** 拦截失败回调 */
 export type RejectedFn = (error: any) => any;
-/**
- * 拦截器实例接口对象
- */
+/** 拦截器实例接口对象 */
 export interface AxiosInterceptor<T> {
 	resolved: ResolvedFn<T>;
 	rejected: RejectedFn;
