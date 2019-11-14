@@ -1,4 +1,5 @@
-import { isPlainObject } from "./util";
+import { isPlainObject, deepMerge } from "./util";
+import { Method } from "../types";
 
 function normalizeHeaderName(headers: object = {}, normalizedName: string) {
 	if (!headers) return;
@@ -45,4 +46,19 @@ export function parseHeaders(headers: string): object {
 		if (val) parsed[key] = val.trim();
 	});
 	return parsed;
+}
+
+/**
+ * 扁平化headers,剪除无用属性
+ * @param headers 待处理的headers对象
+ * @param method 当前的Method
+ */
+export function flatterHeaders(headers: any, method: Method) {
+	if (!headers) return headers;
+	// 将headers.common配置,headers.method配置,合并到headers,扁平化
+	headers = deepMerge(headers.common || {}, headers[method] || {}, headers);
+	// 删除掉headers上的多余属性
+	const methodsToDelete = ["delete", "get", "head", "options", "post", "put", "patch", "common"];
+	methodsToDelete.forEach((method) => delete headers[method]);
+	return headers;
 }

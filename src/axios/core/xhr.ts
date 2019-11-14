@@ -21,8 +21,7 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 		request.onerror = (e) => reject(createError("Network Error!" + e, config, null, request));
 		request.ontimeout = (e) => reject(createError(`Timeout of ${timeout}ms exceeded`, config, "ECONNABORTED", request));
 
-		/**
-		 * 构造response,并返回
+		/** 构造response,并返回
 		 * @param request request对象
 		 */
 		function handleResponse(request: XMLHttpRequest) {

@@ -23,6 +23,6 @@ npm install -D typescript ts-node ts-loader
 npm install -D eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-config-alloy
 npm install -D  cross-env npm-run-all husky body-parser
 npm install -D webpack webpack-cli webpack-dev-server html-webpack-plugins
-npm install -D axios
+npm install -D axios qs
 
 ```

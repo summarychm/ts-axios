@@ -1,3 +1,4 @@
+import qs from "qs";
 import axios, { AxiosError } from "./axios/index";
 
 console.log("---axios test begin--");
@@ -9,7 +10,8 @@ console.log("---axios test begin--");
 // errorBaseTest();
 // errorEnhancerTest();
 // axiosInstanceTest();
-interceptorTest();
+// interceptorTest();
+configTest();
 
 function paramsTest() {
 	axios({
@@ -276,6 +278,22 @@ function interceptorTest() {
 		method: "get",
 		headers: {
 			test: "",
+		},
+	}).then((res) => {
+		console.log(res.data);
+	});
+}
+function configTest() {
+	axios.defaults.headers.common["test2"] = 123;
+
+	axios({
+		url: "/config/post",
+		method: "post",
+		data: qs.stringify({
+			a: 1,
+		}),
+		headers: {
+			test: "321",
 		},
 	}).then((res) => {
 		console.log(res.data);
