@@ -2,16 +2,26 @@ import { AxiosPromise, AxiosResponse } from "../types/index";
 import { AxiosRequestConfig } from "../types";
 import { parseHeaders } from "../helper/headers";
 import { createError } from "../helper/error";
+import { isURLSameOrigin } from "../helper/url";
+import cookie from "../helper/cookie";
 
 export function xhr(config: AxiosRequestConfig): AxiosPromise {
 	return new Promise((resolve, reject) => {
-		const { data = null, url, method = "get", headers = {}, responseType, timeout, cancelToken, withCredentials } = config;
+		const { data = null, url, method = "get", headers = {}, responseType, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName } = config;
 		const request = new XMLHttpRequest();
 		if (responseType) request.responseType = responseType;
 		if (timeout) request.timeout = timeout;
 
 		request.open(method.toUpperCase(), url, true);
-		setRequestHeader(headers, data, request);
+
+		if (withCredentials) request.withCredentials = true;
+		// xsrf 跨域自动为 header 添加 token 键值对
+		if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+			const xsrfValue = cookie.read(xsrfCookieName);
+			if (xsrfValue) headers[xsrfHeaderName] = xsrfValue;
+		}
+
+		setRequestHeader(headers, data, request); // 更新request的headers
 
 		if (cancelToken) {
 			// 注册cancelTokenPromise的回调,用户通过resolve该Promise实现xhr.abort的目的.
@@ -20,7 +30,6 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 				reject(reason);
 			});
 		}
-		if (withCredentials) request.withCredentials = true;
 
 		request.onreadystatechange = () => {
 			if (request.readyState !== 4) return;

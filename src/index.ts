@@ -15,7 +15,8 @@ console.log("---axios test begin--");
 // transformReqResTest();
 // axiosCreateTest();
 // cancelTokenTest();
-withCredentials();
+// withCredentialsTest();
+xsrfTest();
 
 function paramsTest() {
 	axios({
@@ -402,7 +403,7 @@ function cancelTokenTest() {
 		cancel("测试取消");
 	}, 200);
 }
-function withCredentials() {
+function withCredentialsTest() {
 	document.cookie = "a=b";
 
 	axios.get("/more/get").then((res) => {
@@ -420,4 +421,15 @@ function withCredentials() {
 		.then((res) => {
 			console.log(res);
 		});
+}
+
+function xsrfTest() {
+	const instance = axios.create({
+		xsrfCookieName: "XSRF-TOKEN-D",
+		xsrfHeaderName: "X-XSRF-TOKEN-D",
+	});
+
+	instance.get("/more/xsrf").then((res) => {
+		console.log(res);
+	});
 }

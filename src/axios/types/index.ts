@@ -18,6 +18,10 @@ export interface AxiosRequestConfig {
 	cancelToken?: CancelTokenInstance;
 	/** 是否强制携带cookie */
 	withCredentials?: boolean;
+	// token的cookieName
+	xsrfCookieName?: string;
+	// token对应的headerName
+	xsrfHeaderName?: string;
 }
 export interface AxiosResponse {
 	data: any;

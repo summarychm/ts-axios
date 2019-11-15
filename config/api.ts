@@ -4,7 +4,11 @@ import bodyParser from "body-parser";
 export function apiRouter(app: Router) {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
-
+	// express 中间件 加入 cookie
+	app.use(function(req: Request, res: Response, next: any) {
+		res.cookie("XSRF-TOKEN-D", "9527");
+		next();
+	});
 	let router = app;
 
 	registerSimpleRouter();
@@ -22,6 +26,7 @@ export function apiRouter(app: Router) {
 	registerCancelRouter();
 
 	registerWithCredentials();
+	registerXsrf();
 
 	function registerSimpleRouter() {
 		router.get("/simple/get", function(req, res) {
@@ -145,6 +150,11 @@ export function apiRouter(app: Router) {
 	}
 	function registerWithCredentials() {
 		router.get("/more/get", function(req, res) {
+			res.json({ cookie: req.headers.cookie });
+		});
+	}
+	function registerXsrf() {
+		router.get("/more/xsrf", function(req, res) {
 			res.json({ cookie: req.headers.cookie });
 		});
 	}

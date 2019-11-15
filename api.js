@@ -7,6 +7,10 @@ var body_parser_1 = __importDefault(require("body-parser"));
 function apiRouter(app) {
     app.use(body_parser_1.default.json());
     app.use(body_parser_1.default.urlencoded({ extended: true }));
+    app.use(function (req, res, next) {
+        res.cookie("XSRF-TOKEN-D", "9527");
+        next();
+    });
     var router = app;
     registerSimpleRouter();
     registerBaseRouter();
@@ -16,6 +20,7 @@ function apiRouter(app) {
     registerConfigRouter();
     registerCancelRouter();
     registerWithCredentials();
+    registerXsrf();
     function registerSimpleRouter() {
         router.get("/simple/get", function (req, res) {
             res.json({
@@ -122,6 +127,11 @@ function apiRouter(app) {
     }
     function registerWithCredentials() {
         router.get("/more/get", function (req, res) {
+            res.json({ cookie: req.headers.cookie });
+        });
+    }
+    function registerXsrf() {
+        router.get("/more/xsrf", function (req, res) {
             res.json({ cookie: req.headers.cookie });
         });
     }
