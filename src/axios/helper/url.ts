@@ -68,8 +68,7 @@ interface URLOrigin {
 	host: string;
 }
 
-/**
- * 获取当前url的protocol & host(借助于a标签的自动解析)
+/** 获取当前url的protocol & host(借助于a标签的自动解析)
  * @param url 网址
  */
 function resolveURL(url: string): URLOrigin {
@@ -77,8 +76,7 @@ function resolveURL(url: string): URLOrigin {
 	const { protocol, host } = urlParsingNode;
 	return { protocol, host };
 }
-/**
- * 是否是同域请求(parsedOrigin vs currentOrigin)
+/** 是否是同域请求(parsedOrigin vs currentOrigin)
  * @param requestURL 请求地址url
  */
 export function isURLSameOrigin(requestURL: string): boolean {

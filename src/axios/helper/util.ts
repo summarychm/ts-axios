@@ -19,8 +19,7 @@ export function extend<T, U>(to: T, form: U): T & U {
 	return to as T & U;
 }
 
-/**
- * 递归合并所传对象
+/** 递归合并所传对象
  * @param obj 待合并对象集合
  */
 export function deepMerge(...objs: any[]): object {

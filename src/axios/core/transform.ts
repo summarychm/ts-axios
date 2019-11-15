@@ -1,7 +1,6 @@
 import { AxiosTransformer } from "../types";
 
-/**
- * 转换请求/响应的transformFn
+/** 转换请求/响应的transformFn
  * @param data request.data
  * @param headers request.headers
  * @param fns 转换函数ary

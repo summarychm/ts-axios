@@ -2,9 +2,9 @@ import path from "path";
 import webpack, { Configuration } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
-import { apiRouter } from "./api";
+import { apiRouter } from "./apiRouter";
 
-const config: webpack.Configuration = {
+const config: Configuration = {
 	mode: "development",
 	entry: "./src/index.ts",
 	output: {
@@ -18,7 +18,7 @@ const config: webpack.Configuration = {
 		port: 3000,
 		open: true,
 		// proxy: {
-		// 	// wds内置的express配合http-proxy-middleware
+		// wds内置的express配合http-proxy-middleware
 		// 	"/api": {
 		// 		target: "http://localhost:3000",
 		// 		pathRewrite: { "/api": "" }, // 重写最终发向服务器的 url
@@ -40,7 +40,7 @@ const config: webpack.Configuration = {
 					{
 						loader: "ts-loader",
 						options: {
-							transpileOnly: true, // 不进行语法检查
+							transpileOnly: true, // 不进行语法检查,加速
 							experimentalWatchApi: true,
 							configFile: path.join(__dirname, "./config/tsconfig.json"),
 						},

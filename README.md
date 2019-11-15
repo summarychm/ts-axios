@@ -1,8 +1,10 @@
 ## 简介
 
+使用 TypeScript 实现一版 axios
+
 ## Todo List
 
-- [] 使用 TS 开发一版 axios,现实其绝大多数功能.
+- [x] 使用 TS 开发一版 axios,现实其绝大多数功能.
   - [x] 在浏览器端使用 XMLHttpRequest 对象通讯
   - [x] 支持 Promise API
   - [x] 支持请求和响应的拦截器
@@ -10,12 +12,15 @@
   - [x] 支持 axios.create 创建新的 axios 实例
   - [x] 支持请求的取消
   - [x] JSON 数据的自动转换
-  - [] 客户端防止 XSRF 攻击(xhr.withCredentials)
+  - [x] 跨域携带 cookie xhr.withCredentials
+  - [x] XSRF: header 自动添加 token 键值对
 - [x] 使用 TS 配置 webpackConfig,
   - [x] 使用 tsc 先编译 webpack.config.ts,
   - [x] 再运行 webpack-dev-server
 - [x] 使用 webpack-dev-server 的 beforeHook 实现 mock 功能,省去搭建 server 步骤
 - [x] 使用 eslint+gitCommitHook 来进行 tsCheck
+- [ ] 进行单元测试
+- [ ] 发布到 npm
 
 ## package List
 

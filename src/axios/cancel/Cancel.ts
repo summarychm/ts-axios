@@ -5,8 +5,7 @@ export default class Cancel {
 		this.message = message;
 	}
 }
-/**
- * 判断是否是Cancel类实例
+/** 判断是否是Cancel类实例
  * @param value
  */
 export function isCancel(value: any): boolean {
