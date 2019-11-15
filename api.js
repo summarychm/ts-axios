@@ -15,6 +15,7 @@ function apiRouter(app) {
     registerInterceptorRouter();
     registerConfigRouter();
     registerCancelRouter();
+    registerWithCredentials();
     function registerSimpleRouter() {
         router.get("/simple/get", function (req, res) {
             res.json({
@@ -117,6 +118,11 @@ function apiRouter(app) {
             setTimeout(function () {
                 res.json(req.body);
             }, 1000);
+        });
+    }
+    function registerWithCredentials() {
+        router.get("/more/get", function (req, res) {
+            res.json({ cookie: req.headers.cookie });
         });
     }
 }

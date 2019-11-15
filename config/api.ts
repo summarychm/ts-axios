@@ -21,6 +21,8 @@ export function apiRouter(app: Router) {
 
 	registerCancelRouter();
 
+	registerWithCredentials();
+
 	function registerSimpleRouter() {
 		router.get("/simple/get", function(req, res) {
 			res.json({
@@ -139,6 +141,11 @@ export function apiRouter(app: Router) {
 			setTimeout(() => {
 				res.json(req.body);
 			}, 1000);
+		});
+	}
+	function registerWithCredentials() {
+		router.get("/more/get", function(req, res) {
+			res.json({ cookie: req.headers.cookie });
 		});
 	}
 }

@@ -1,4 +1,5 @@
-// Axios声明文件
+/* Axios声明文件 */
+
 export type Method = "get" | "GET" | "delete" | "DELETE" | "head" | "HEAD" | "options" | "OPTIONS" | "post" | "POST" | "put" | "PUT" | "patch" | "PATCH";
 
 export interface AxiosRequestConfig {
@@ -6,14 +7,17 @@ export interface AxiosRequestConfig {
 	method?: Method;
 	params?: any;
 	headers?: any;
-	responseType?: XMLHttpRequestResponseType; // 响应类型
 	data?: any;
+	responseType?: XMLHttpRequestResponseType; // 响应类型
 	timeout?: number;
 	/** 请求发出前修改header */
 	transformRequest?: AxiosTransformer | AxiosTransformer[];
 	/** responseData预处理 */
 	transformResponse?: AxiosTransformer | AxiosTransformer[];
+	/** 取消当前xhr */
 	cancelToken?: CancelTokenInstance;
+	/** 是否强制携带cookie */
+	withCredentials?: boolean;
 }
 export interface AxiosResponse {
 	data: any;
@@ -57,9 +61,9 @@ export interface AxiosInstance extends Axios {
 export interface AxiosStatic extends AxiosInstance {
 	/** CancelToken类接口 */
 	CancelToken: CancelTokenStatic;
-	/** CancelToken实例  */
+	/** CancelToken实例 */
 	Cancel: CancelStatic;
-	/**  */
+	/** 是否是Cancel类实例 */
 	isCancel: (value: any) => boolean;
 	/** 创建新的axios实例
 	 * @param config 新axios的配置参数
@@ -67,11 +71,10 @@ export interface AxiosStatic extends AxiosInstance {
 	create(config?: AxiosRequestConfig): AxiosInstance;
 }
 
-/**  转换resquest/response接口 */
+/**  transformResquest/transformResponse接口 */
 export type AxiosTransformer = (data: any, headers?: any) => any;
 
 /************* interceptor begin  ********/
-
 /** 拦截器管理类接口 */
 export interface AxiosInterceptorManager<T> {
 	forEach(fn: (interceptor: AxiosInterceptor<T>) => void);
@@ -97,20 +100,15 @@ export interface CancelTokenInstance {
 	/** 已cancel抛出报错 */
 	throwIfRequested(): void;
 }
-/** cancel取消方法接口 */
-export type Canceler = (message?: string) => void;
-/** cancelToken类构造函数参数接口 */
-export type CancelExecutor = (cancel: Canceler) => void;
-/** CacnelToken.source 方法的返回值接口  */
-export interface CancelTokenSource {
-	token: CancelTokenInstance;
-	cancel: Canceler;
-}
 /** CancelToken的类类型 */
 export interface CancelTokenStatic {
 	new (executor: CancelExecutor): CancelTokenInstance; //构造函数
 	source(): CancelTokenSource; // 静态source方法
 }
+/** cancel取消方法接口 */
+export type Canceler = (message?: string) => void;
+/** cancelToken类构造函数参数接口 */
+export type CancelExecutor = (cancel: Canceler) => void;
 /** cancel实例类型接口 */
 export interface CancelInstance {
 	message?: string;
@@ -119,4 +117,10 @@ export interface CancelInstance {
 export interface CancelStatic {
 	new (message?: string): CancelInstance;
 }
+/** CacnelToken.source 方法的返回值接口  */
+export interface CancelTokenSource {
+	token: CancelTokenInstance;
+	cancel: Canceler;
+}
+
 /************* CancelToken end  ********/

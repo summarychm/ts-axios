@@ -14,7 +14,8 @@ console.log("---axios test begin--");
 // configTest();
 // transformReqResTest();
 // axiosCreateTest();
-cancelTokenTest();
+// cancelTokenTest();
+withCredentials();
 
 function paramsTest() {
 	axios({
@@ -400,4 +401,23 @@ function cancelTokenTest() {
 	setTimeout(() => {
 		cancel("测试取消");
 	}, 200);
+}
+function withCredentials() {
+	document.cookie = "a=b";
+
+	axios.get("/more/get").then((res) => {
+		console.log(res);
+	});
+
+	axios
+		.post(
+			"http://127.0.0.1:8088/more/server2",
+			{},
+			{
+				withCredentials: true,
+			},
+		)
+		.then((res) => {
+			console.log(res);
+		});
 }

@@ -8,9 +8,9 @@
   - [x] 支持请求和响应的拦截器
   - [x] 支持请求数据和响应数据的转换
   - [x] 支持 axios.create 创建新的 axios 实例
-  - [] 支持请求的取消
-  - [] JSON 数据的自动转换
-  - [] 客户端防止 XSRF 攻击
+  - [x] 支持请求的取消
+  - [x] JSON 数据的自动转换
+  - [] 客户端防止 XSRF 攻击(xhr.withCredentials)
 - [x] 使用 TS 配置 webpackConfig,
   - [x] 使用 tsc 先编译 webpack.config.ts,
   - [x] 再运行 webpack-dev-server
