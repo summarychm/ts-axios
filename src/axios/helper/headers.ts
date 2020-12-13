@@ -33,7 +33,7 @@ function autoSetContextType(headers: object, data: any): object {
 	}
 	return headers;
 }
-/** 将headers字符串转为对象
+/** 将headers字符串序列化为对象
  * @param headers responseHeaderStr
  */
 export function parseHeaders(headers: string): object {

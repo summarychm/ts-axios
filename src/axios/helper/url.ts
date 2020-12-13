@@ -5,7 +5,7 @@ const tools = {
 	 *序列化字符串,并保留部分特殊字符( @、:、$、,、空格、[、])
 	 * @param val 待序列化的字符串
 	 */
-	encode: function(val: string): string {
+	encode: function (val: string): string {
 		return encodeURIComponent(val)
 			.replace(/%40/g, "@")
 			.replace(/%3A/gi, ":")
@@ -19,7 +19,7 @@ const tools = {
 	 * 序列化参数集合,处理各种边界情况
 	 * @param params 待参数集合
 	 */
-	buildParams: function(params: object) {
+	buildParams: function (params: object) {
 		let parts: string[] = [];
 		for (let [key, val] of Object.entries(params)) {
 			// 空值忽略 删除value为null的键值对
@@ -47,7 +47,6 @@ const tools = {
  * @param params 请求参数集合
  */
 export function buildURL(url: string, params?: object): string {
-	// 保留URL中已存在的参数
 	if (!params) return url;
 
 	const parts: string[] = tools.buildParams(params);
@@ -55,6 +54,7 @@ export function buildURL(url: string, params?: object): string {
 
 	// 删除url锚点 删除#哈希标记
 	const markIndex = url.indexOf("#");
+	// TODO 这里应该处理既包含锚点又包含默认参数的情况
 	if (markIndex !== -1) url = url.slice(0, markIndex);
 
 	url += url.includes("?") ? "&" : "?" + parts.join("&");

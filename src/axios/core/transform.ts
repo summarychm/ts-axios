@@ -5,7 +5,7 @@ import { AxiosTransformer } from "../types";
  * @param headers request.headers
  * @param fns 转换函数ary
  */
-export default function transform(data: any, headers: any, fns?: AxiosTransformer | AxiosTransformer[]): any {
+export default function transformRequestOrResponse(data: any, headers: any, fns?: AxiosTransformer | AxiosTransformer[]): any {
 	if (!fns) return data;
 	if (!Array.isArray(fns)) fns = [fns];
 	fns.forEach((fn) => {

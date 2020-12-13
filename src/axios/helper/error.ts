@@ -6,12 +6,14 @@ export class AxiosError extends Error {
 	public request?: any;
 	public response?: AxiosResponse;
 	public constructor(message: string, config: AxiosRequestConfig, code?: string | null, request?: any, response?: AxiosResponse) {
-		super(message);
+		super(message); // 继承父类
 		this.config = config;
 		this.code = code;
 		this.request = request;
 		this.response = response;
 		this.isAxiosError = true;
+
+		// 修正TS中继承Error/Map等内置类时,自身方法找不到以及instanceof错误的问题
 		// https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work
 		Object.setPrototypeOf(this, AxiosError.prototype);
 	}

@@ -34,10 +34,10 @@ export default class implements Axios {
 		};
 	}
 	/**
-	 * axiosRequestAjax
+	 * axiosRequest方法
 	 * @param config AxiosConfig
 	 */
-	request(url: any, config?: AxiosRequestConfig): AxiosPromise {
+	request(url: string | AxiosRequestConfig, config?: AxiosRequestConfig): AxiosPromise {
 		// 根据传入的参数动态处理config
 		// 传入url+config的情况,将url合并到config中
 		if (typeof url === "string") {
@@ -48,7 +48,8 @@ export default class implements Axios {
 		// 合并defaultConfig和userConfig,方便从headers上取值
 		config = mergeConfig(this.defaults, config);
 
-		// chain[] 拦截器集合,通过遍历该数组实现一次循环,触发全部拦截器
+		/***  拦截器部分 begin  ****/
+		// chain[] 存储拦截器集合,通过遍历该数组实现一次循环,触发全部拦截器
 		// !  执行顺序: request拦截器  -> dispatchRequest  -> response拦截器
 		// 将dispatchRequest作为拦截器chain 的初始项,利用while+promise实现链式调用
 		const chain: AxiosPromiseChain[] = [
@@ -61,12 +62,12 @@ export default class implements Axios {
 		this.interceptors.request.forEach((interceptor) => chain.unshift(interceptor));
 		// request拦截器,应为队列结构,所以直接使用push来模拟
 		this.interceptors.response.forEach((interceptor) => chain.push(interceptor));
-
 		let promise = Promise.resolve(config); // 将config作为初始param传入chain
 		while (chain.length) {
 			const { resolved, rejected } = chain.shift(); // 取出第一个chainItem
 			promise = promise.then(resolved, rejected); // 遍历
 		}
+		/***  拦截器部分 end  ****/
 		return promise as AxiosPromise;
 	}
 

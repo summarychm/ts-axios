@@ -2,7 +2,7 @@ import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from "../types/index"
 import { xhr } from "./xhr";
 import { buildURL } from "../helper/url";
 import { flatterHeaders } from "../helper/headers";
-import transform from "./transform";
+import transformRequestOrResponse from "./transform";
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
 	throwIfCancellationRequested(config);
@@ -16,7 +16,7 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
 function processConfig(config: AxiosRequestConfig): void {
 	config.url = transformURL(config);
 	// 调用预处理函数
-	config.data = transform(config.data, config.headers, config.transformRequest);
+	config.data = transformRequestOrResponse(config.data, config.headers, config.transformRequest);
 	// 因为规范化data时需要最新的headers所以先处理headers
 	config.headers = flatterHeaders(config.headers, config.method); // 合并并剪除无用header
 }
@@ -26,15 +26,15 @@ function processConfig(config: AxiosRequestConfig): void {
  */
 function transformURL(config: AxiosRequestConfig): string {
 	const { url, params = {} } = config;
-	return buildURL(url!, params);
+	return buildURL(url!, params); // 这里的URL为必传
 }
 
 /** 规范化 AxiosResponse
  * @param res AxiosResponse
  */
 function transformResponseData(res: AxiosResponse): AxiosResponse {
-	// 调用预处理
-	res.data = transform(res.data, res.headers, res.config.transformResponse);
+	// 尝试将res.data转为JSON格式
+	res.data = transformRequestOrResponse(res.data, res.headers, res.config.transformResponse);
 	return res;
 }
 

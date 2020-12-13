@@ -9,7 +9,7 @@ export function transformRequestData(data: any): any {
 	return data;
 }
 
-/** 尝试将string类型的responseData转为object类型
+/** 尝试将string类型的responseData转为object(JSON)
  * @param data responseData
  */
 export function transformResponseData(data: any) {

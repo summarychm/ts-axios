@@ -10,11 +10,11 @@ export function isPlainObject(val: any): val is Object {
 
 /** 将form自身及其原型上的属性和方法拷贝到to上
  * @param to 接收方
- * @param form 发送发
+ * @param form 发送方
  */
 export function extend<T, U>(to: T, form: U): T & U {
 	for (const key in form) {
-		to[key as string] = form[key];
+		to[key.toString()] = form[key];
 	}
 	return to as T & U;
 }
@@ -22,9 +22,9 @@ export function extend<T, U>(to: T, form: U): T & U {
 /** 递归合并所传对象
  * @param obj 待合并对象集合
  */
-export function deepMerge(...objs: any[]): object {
+export function deepMerge(...obj: any[]): object {
 	const result = Object.create(null);
-	objs.forEach((obj) => {
+	obj.forEach((obj) => {
 		if (!obj) return;
 		Object.keys(obj).forEach((key) => {
 			const val = obj[key];

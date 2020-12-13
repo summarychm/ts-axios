@@ -6,7 +6,7 @@ console.log("---axios test begin--");
 // paramsTest();
 // dataTest();
 // headersTest();
-// responseDataTest();
+responseDataTest();
 // errorBaseTest();
 // errorEnhancerTest();
 // axiosInstanceTest();
@@ -16,7 +16,7 @@ console.log("---axios test begin--");
 // axiosCreateTest();
 // cancelTokenTest();
 // withCredentialsTest();
-xsrfTest();
+// xsrfTest();
 
 function paramsTest() {
 	axios({
@@ -154,6 +154,31 @@ function responseDataTest() {
 	}).then((res) => {
 		console.log(res);
 	});
+
+	/******* 相应数据支持泛型测试 begin ********/
+	interface ResponseData<T> {
+		result: T;
+		message: string;
+		code: number;
+	}
+	interface User {
+		name: string;
+		age: number;
+	}
+	function getUser<T>() {
+		return axios<ResponseData<T>>("/extend/user")
+			.then((res) => res.data)
+			.catch((e) => {
+				console.error(e);
+			});
+	}
+	(async function () {
+		let user = await getUser<User>();
+		if (user) {
+			console.log("user.result.age", user.result.age);
+		}
+	})();
+	/******* 相应数据支持泛型测试 end ********/
 }
 
 function errorBaseTest() {
@@ -164,7 +189,7 @@ function errorBaseTest() {
 		.then((res) => {
 			console.log(res);
 		})
-		.catch((e) => {
+		.catch((e: AxiosError) => {
 			console.log(e);
 		});
 
@@ -308,14 +333,14 @@ function configTest() {
 function transformReqResTest() {
 	axios({
 		transformRequest: [
-			function(data) {
+			function (data) {
 				return qs.stringify(data);
 			},
 			...(axios.defaults.transformRequest as AxiosTransformer[]),
 		],
 		transformResponse: [
 			...(axios.defaults.transformResponse as AxiosTransformer[]),
-			function(data) {
+			function (data) {
 				if (typeof data === "object") {
 					data.b = 2;
 				}
@@ -334,14 +359,14 @@ function transformReqResTest() {
 function axiosCreateTest() {
 	const instance = axios.create({
 		transformRequest: [
-			function(data) {
+			function (data) {
 				return qs.stringify(data);
 			},
 			...(axios.defaults.transformRequest as AxiosTransformer[]),
 		],
 		transformResponse: [
 			...(axios.defaults.transformResponse as AxiosTransformer[]),
-			function(data) {
+			function (data) {
 				if (typeof data === "object") {
 					data.b = 2;
 				}
@@ -369,7 +394,7 @@ function cancelTokenTest() {
 		.get("/cancel/get", {
 			cancelToken: source.token,
 		})
-		.catch(function(e) {
+		.catch(function (e) {
 			if (axios.isCancel(e)) {
 				console.log("Request canceled", e.message);
 			}
@@ -378,7 +403,7 @@ function cancelTokenTest() {
 	setTimeout(() => {
 		source.cancel("Operation canceled by the user.");
 
-		axios.post("/cancel/post", { a: 1 }, { cancelToken: source.token }).catch(function(e) {
+		axios.post("/cancel/post", { a: 1 }, { cancelToken: source.token }).catch(function (e) {
 			if (axios.isCancel(e)) {
 				console.log("isCancel", e.message);
 			}
@@ -393,7 +418,7 @@ function cancelTokenTest() {
 				cancel = c;
 			}),
 		})
-		.catch(function(e) {
+		.catch(function (e) {
 			if (axios.isCancel(e)) {
 				console.log("Request canceled", e);
 			}
