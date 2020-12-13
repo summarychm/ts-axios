@@ -7,6 +7,7 @@ var body_parser_1 = __importDefault(require("body-parser"));
 function apiRouter(app) {
     app.use(body_parser_1.default.json());
     app.use(body_parser_1.default.urlencoded({ extended: true }));
+    // express 中间件 加入 cookie
     app.use(function (req, res, next) {
         res.cookie("XSRF-TOKEN-D", "9527");
         next();

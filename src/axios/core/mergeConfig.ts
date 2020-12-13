@@ -2,8 +2,7 @@ import { AxiosRequestConfig } from "../types";
 import { isPlainObject, deepMerge } from "../helper/util";
 
 let strats = {}; // 合并规则集合
-/**
- * 合并策略(默认): val2 ? val2: val1
+/** 合并策略(默认): val2 ? val2: val1
  * @param val1
  * @param val2
  */
@@ -11,8 +10,7 @@ function defaultStrat(val1: any, val2: any): any {
 	return typeof val2 !== "undefined" ? val2 : val1;
 }
 
-/**
- * 合并策略: val2 && val2
+/** 合并策略: val2 && val2
  * @param val1
  * @param val2
  */
@@ -24,8 +22,7 @@ stratKeyFromVal2.forEach((key) => {
 	strats[key] = fromVal2Strat;
 });
 
-/**
- * 合并策略: 复杂对象合并
+/** 合并策略: 复杂对象合并
  * @param val1
  * @param val2
  */
@@ -44,8 +41,7 @@ stratKeyDeepMerge.forEach((key) => {
 	strats[key] = deepMergeStrat;
 });
 
-/**
- * 合并axios的配置
+/** 合并axios的配置
  * @param config1 默认配置
  * @param config2 自定义配置
  */

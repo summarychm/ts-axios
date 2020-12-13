@@ -48,8 +48,7 @@ export function parseHeaders(headers: string): object {
 	return parsed;
 }
 
-/**
- * 扁平化headers,剪除无用属性
+/** 扁平化headers,剪除无用属性
  * @param headers 待处理的headers对象
  * @param method 当前的Method
  */
