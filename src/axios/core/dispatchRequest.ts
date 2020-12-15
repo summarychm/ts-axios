@@ -14,11 +14,12 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
  * @param config axiosConfig对象
  */
 function processConfig(config: AxiosRequestConfig): void {
-	config.url = transformURL(config);
-	// 调用预处理函数
+	config.url = transformURL(config); // 转换URL
+	// 处理headers被抽取到了defaults.transformRequest中了.
+	// 处理数据(如序列化)
 	config.data = transformRequestOrResponse(config.data, config.headers, config.transformRequest);
-	// 因为规范化data时需要最新的headers所以先处理headers
-	config.headers = flatterHeaders(config.headers, config.method); // 合并并剪除无用header
+	// 合并并剪除无用headers
+	config.headers = flatterHeaders(config.headers, config.method);
 }
 
 /** 处理urlParams参数集合

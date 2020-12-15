@@ -54,7 +54,7 @@ export function parseHeaders(headers: string): object {
  */
 export function flatterHeaders(headers: any, method: Method) {
 	if (!headers) return headers;
-	// 将headers.common配置,headers.method配置,合并到headers,扁平化
+	// 将headers.common配置,headers.method配置,合并到headers(扁平化,会产生冗余的key,需稍后清除)
 	headers = deepMerge(headers.common || {}, headers[method] || {}, headers);
 	// 删除掉headers上的多余属性
 	const methodsToDelete = ["delete", "get", "head", "options", "post", "put", "patch", "common"];

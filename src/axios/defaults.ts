@@ -24,14 +24,14 @@ const defaults: AxiosRequestConfig = {
 	xsrfHeaderName: "X-XSRF-TOKEN",
 };
 
+// 以下几种请求无需添加额外的headers
 const methodsNoData = ["delete", "get", "head", "options"];
-
 methodsNoData.forEach((method) => {
 	defaults.headers[method] = {};
 });
 
+// 对于post,put,patch添加Content-Type属性
 const methodsWithData = ["post", "put", "patch"];
-
 methodsWithData.forEach((method) => {
 	defaults.headers[method] = {
 		"Content-Type": "application/x-www-form-urlencoded",

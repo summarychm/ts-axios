@@ -46,7 +46,7 @@ export default class implements Axios {
 			config.url = url;
 		} else config = url; // 只传入config的情况.将url指定为config
 
-		// 合并defaultConfig和userConfig,方便从headers上取值
+		//! 合并defaultConfig和userConfig
 		config = mergeConfig(this.defaults, config);
 
 		/******************  拦截器部分 begin  *************************/

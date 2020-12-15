@@ -30,8 +30,10 @@ export function deepMerge(...obj: any[]): object {
 			const val = obj[key];
 			// 如果val是纯对象,则深度合并
 			if (isPlainObject(val)) {
-				if (isPlainObject(result[key])) result[key] = deepMerge(result[key], val);
-				else result[key] = deepMerge({}, val);
+				// 如果result中已经存在该key,则深度合并result[key]和val
+				if (isPlainObject(result[key])) {
+					result[key] = deepMerge(result[key], val);
+				} else result[key] = deepMerge({}, val);
 			} else result[key] = val; // 如果val不为纯对象,则直接赋值
 		});
 	});
