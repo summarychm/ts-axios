@@ -7,17 +7,17 @@ import InterceptorManager from "./InterceptorManager";
 import dispatchRequest from "./dispatchRequest";
 import mergeConfig from "./mergeConfig";
 
-/** 拦截器实例集合接口
+/** 拦截器实例接口
  */
 interface AxiosInterceptors {
-	request: AxiosInterceptorManager<AxiosRequestConfig>;
-	response: AxiosInterceptorManager<AxiosResponse>;
+	request: AxiosInterceptorManager<AxiosRequestConfig>; // 处理config
+	response: AxiosInterceptorManager<AxiosResponse>; // 处理response
 }
 
 /** 拦截器执行链中单个chain接口
  */
-interface AxiosPromiseChain {
-	resolved: ResolvedFn;
+interface AxiosPromiseChain<T> {
+	resolved: ResolvedFn<T>;
 	rejected?: RejectedFn;
 }
 
@@ -28,6 +28,7 @@ export default class implements Axios {
 	defaults: AxiosRequestConfig; // 默认配置属性
 	constructor(initConfig: AxiosRequestConfig) {
 		this.defaults = initConfig;
+		// 初始化拦截器
 		this.interceptors = {
 			request: new InterceptorManager<AxiosRequestConfig>(),
 			response: new InterceptorManager<AxiosResponse>(),
@@ -48,27 +49,27 @@ export default class implements Axios {
 		// 合并defaultConfig和userConfig,方便从headers上取值
 		config = mergeConfig(this.defaults, config);
 
-		/***  拦截器部分 begin  ****/
-		// chain[] 存储拦截器集合,通过遍历该数组实现一次循环,触发全部拦截器
+		/******************  拦截器部分 begin  *************************/
 		// !  执行顺序: request拦截器  -> dispatchRequest  -> response拦截器
-		// 将dispatchRequest作为拦截器chain 的初始项,利用while+promise实现链式调用
-		const chain: AxiosPromiseChain[] = [
+		// chain[] 存储拦截器集合,最终链式调用,将dispatchRequest作为默认chain,利用while+promise实现链式调用
+		const chain: Array<AxiosPromiseChain<any>> = [
 			{
 				resolved: dispatchRequest,
 				rejected: undefined,
 			},
 		];
-		// request拦截器,应为堆栈结构,所以使用unshift来模拟
+		// request拦截器为堆栈模型(后入先出),所以使用unshift来模拟
 		this.interceptors.request.forEach((interceptor) => chain.unshift(interceptor));
-		// request拦截器,应为队列结构,所以直接使用push来模拟
+		// request拦截器为队列模型(先入先出),所以使用push来模拟
 		this.interceptors.response.forEach((interceptor) => chain.push(interceptor));
 		let promise = Promise.resolve(config); // 将config作为初始param传入chain
 		while (chain.length) {
 			const { resolved, rejected } = chain.shift(); // 取出第一个chainItem
 			promise = promise.then(resolved, rejected); // 遍历
 		}
-		/***  拦截器部分 end  ****/
-		return promise as AxiosPromise;
+		/******************  拦截器部分 end  *************************/
+
+		return promise as AxiosPromise; // 在dispatchRequest后promise由config转变为了response
 	}
 
 	get(url: string, config?: AxiosRequestConfig): AxiosPromise {

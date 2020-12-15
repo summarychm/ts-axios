@@ -1,4 +1,4 @@
-import { AxiosInterceptorManager, AxiosInterceptor } from "../types";
+import { AxiosInterceptorManager, AxiosInterceptor, ResolvedFn, RejectedFn } from "../types";
 
 // interface forEachClFn<T> {
 // 	(interceptor: Interceptor<T>): void;
@@ -14,9 +14,9 @@ export default class InterceptorManager<T> implements AxiosInterceptorManager<T>
 	 * 注册拦截器
 	 * @param resolved 拦截成功回调
 	 * @param rejected 拦截失败回调
-	 * @returns 拦截器id
+	 * @returns 拦截器id(用于eject删除)
 	 */
-	use(resolved, rejected): number {
+	use(resolved: ResolvedFn<T>, rejected: RejectedFn): number {
 		this.interceptors.push({ resolved, rejected });
 		return this.interceptors.length - 1;
 	}
