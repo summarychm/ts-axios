@@ -26,8 +26,8 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 		if (cancelToken) {
 			// 注册cancelTokenPromise的回调,用户通过resolve该Promise实现xhr.abort的目的.
 			cancelToken.promise.then((reason) => {
-				request.abort(); // 取消ajax
-				reject(reason);
+				request.abort(); // 取消xhr
+				reject(reason); // 完成此次xhr
 			});
 		}
 

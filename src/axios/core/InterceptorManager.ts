@@ -1,9 +1,5 @@
 import { AxiosInterceptorManager, AxiosInterceptor, ResolvedFn, RejectedFn } from "../types";
 
-// interface forEachClFn<T> {
-// 	(interceptor: Interceptor<T>): void;
-// }
-
 export default class InterceptorManager<T> implements AxiosInterceptorManager<T> {
 	// 拦截器集合
 	private interceptors: Array<AxiosInterceptor<T> | null>;

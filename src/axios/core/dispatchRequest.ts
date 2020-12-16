@@ -39,7 +39,7 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
 	return res;
 }
 
-/** 检测cancelToken是否已经使用过了
+/** 检测cancelToken是否已经使用过了,如果已使用则抛错
  * @param config axiosConfig
  */
 function throwIfCancellationRequested(config: AxiosRequestConfig): void {

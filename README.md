@@ -4,14 +4,15 @@
 
 ## Todo List
 
-- [x] 使用 TS 开发一版 axios,现实其绝大多数功能.
+- [x] 已支持的主要功能.
   - [x] 在浏览器端使用 XMLHttpRequest 对象通讯
-  - [x] 支持 Promise API
+  - [x] 支持 Promise 链式调用
   - [x] 支持请求和响应的拦截器
+  - [x] 支持默认配置和用户自定义配置
   - [x] 支持请求数据和响应数据的转换
   - [x] 支持 axios.create 创建新的 axios 实例
-  - [x] 支持请求的取消
   - [x] JSON 数据的自动转换
+  - [x] 支持请求的取消(基于 promise 分离 code)
   - [x] 跨域携带 cookie xhr.withCredentials
   - [x] XSRF: header 自动添加 token 键值对
 - [x] 使用 TS 配置 webpackConfig,

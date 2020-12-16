@@ -26,8 +26,9 @@ axios.create = function create(config) {
 	return createInstance(mergeConfig(defaults, config));
 };
 
+// 扩展cancel相关的静态属性和方法
 axios.CancelToken = CancelToken;
-axios.Cancel = Cancel;
-axios.isCancel = isCancel;
+axios.Cancel = Cancel; // cancelMessage类
+axios.isCancel = isCancel; // 是否是cancelMessage类实例
 
 export default axios;

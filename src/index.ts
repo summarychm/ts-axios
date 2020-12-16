@@ -11,10 +11,10 @@ console.log("---axios test begin--");
 // errorEnhancerTest();
 // axiosInstanceTest();
 // interceptorTest();
-configTest();
+// configTest();
 // transformReqResTest();
 // axiosCreateTest();
-// cancelTokenTest();
+cancelTokenTest();
 // withCredentialsTest();
 // xsrfTest();
 
@@ -374,7 +374,6 @@ function axiosCreateTest() {
 			},
 		],
 	});
-
 	instance({
 		url: "/config/post",
 		method: "post",
@@ -387,9 +386,9 @@ function axiosCreateTest() {
 }
 
 function cancelTokenTest() {
+	// 方法一 source.cancel
 	const CancelToken = axios.CancelToken;
 	const source = CancelToken.source();
-
 	axios
 		.get("/cancel/get", {
 			cancelToken: source.token,
@@ -402,20 +401,17 @@ function cancelTokenTest() {
 
 	setTimeout(() => {
 		source.cancel("Operation canceled by the user.");
-
 		axios.post("/cancel/post", { a: 1 }, { cancelToken: source.token }).catch(function (e) {
-			if (axios.isCancel(e)) {
-				console.log("isCancel", e.message);
-			}
+			if (axios.isCancel(e)) console.log("isCancel", e.message);
 		});
 	}, 100);
 
+	// 方法二 new CancelToken
 	let cancel: Canceler;
-
 	axios
 		.get("/cancel/get", {
-			cancelToken: new CancelToken((c) => {
-				cancel = c;
+			cancelToken: new CancelToken((cancelFn) => {
+				cancel = cancelFn;
 			}),
 		})
 		.catch(function (e) {
