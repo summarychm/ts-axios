@@ -22,6 +22,10 @@ export interface AxiosRequestConfig {
 	xsrfCookieName?: string;
 	// token对应的headerName
 	xsrfHeaderName?: string;
+	// 下载进度
+	onDownloadProgress?: (e: ProgressEvent) => void;
+	// 上传进度
+	onUploadProgress?: (e: ProgressEvent) => void;
 }
 export interface AxiosResponse<T = any> {
 	data: T;

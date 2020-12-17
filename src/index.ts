@@ -1,5 +1,7 @@
 import qs from "qs";
 import axios, { AxiosError, AxiosTransformer, Canceler } from "./axios/index";
+import "nprogress/nprogress.css";
+import NProgress from "nprogress";
 
 console.log("---axios test begin--");
 
@@ -14,9 +16,10 @@ console.log("---axios test begin--");
 // configTest();
 // transformReqResTest();
 // axiosCreateTest();
-cancelTokenTest();
+// cancelTokenTest();
 // withCredentialsTest();
-// xsrfTest();
+xsrfTest();
+uploadTest();
 
 function paramsTest() {
 	axios({
@@ -451,6 +454,79 @@ function xsrfTest() {
 	});
 
 	instance.get("/more/xsrf").then((res) => {
-		console.log(res);
+		console.log("该请求携带了xsrfToken,该实例的后续请求都会自动携带该token,可查看requestHeader", res);
 	});
+	instance.get("/base/get").then((res) => {
+		console.log("查看requestHeader", res);
+	});
+	axios({
+		method: "get",
+		url: "/base/get",
+		params: {
+			foo: ["bar", "baz"],
+		},
+	}).then((res) => {
+		console.log("没有设置xsrf头的请求,在requestHeader中就没有携带对应的token", res);
+	});
+}
+
+function uploadTest() {
+	const instance = axios.create();
+	function calculatePercentage(loaded: number, total: number) {
+		return Math.floor(Number(loaded)) / total;
+	}
+
+	function loadProgressBar() {
+		const setupStartProgress = () => {
+			instance.interceptors.request.use((config) => {
+				NProgress.start();
+				return config;
+			});
+		};
+		const setupUpdateProgress = () => {
+			const update = (e: ProgressEvent) => {
+				console.log(e);
+				NProgress.set(calculatePercentage(e.loaded, e.total));
+			};
+			instance.defaults.onDownloadProgress = update;
+			instance.defaults.onUploadProgress = update;
+		};
+		const setupStopProgress = () => {
+			instance.interceptors.response.use(
+				(response) => {
+					NProgress.done();
+					return response;
+				},
+				(error) => {
+					NProgress.done();
+					return Promise.reject(error);
+				},
+			);
+		};
+
+		setupStartProgress();
+		setupUpdateProgress();
+		setupStopProgress();
+	}
+
+	loadProgressBar();
+
+	const downloadEl = document.getElementById("download");
+
+	downloadEl &&
+		downloadEl.addEventListener("click", (e) => {
+			instance.get("https://img.mukewang.com/5cc01a7b0001a33718720632.jpg");
+		});
+
+	const uploadEl = document.getElementById("upload");
+
+	uploadEl &&
+		uploadEl.addEventListener("click", (e) => {
+			const data = new FormData();
+			const fileEl = document.getElementById("file") as HTMLInputElement;
+			if (fileEl.files) {
+				data.append("file", fileEl.files[0]);
+				instance.post("/more/upload", data);
+			}
+		});
 }

@@ -4,10 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var body_parser_1 = __importDefault(require("body-parser"));
+// import multipart from "connect-multiparty";
+var multipart = require("connect-multiparty");
 function apiRouter(app) {
     app.use(body_parser_1.default.json());
     app.use(body_parser_1.default.urlencoded({ extended: true }));
-    // express 中间件 加入 cookie
+    // 加入 XSRF测试所需的cookie键值对
     app.use(function (req, res, next) {
         res.cookie("XSRF-TOKEN-D", "9527");
         next();
@@ -22,6 +24,7 @@ function apiRouter(app) {
     registerCancelRouter();
     registerWithCredentials();
     registerXsrf();
+    registerMoreRouter();
     function registerSimpleRouter() {
         router.get("/simple/get", function (req, res) {
             res.json({
@@ -134,6 +137,16 @@ function apiRouter(app) {
     function registerXsrf() {
         router.get("/more/xsrf", function (req, res) {
             res.json({ cookie: req.headers.cookie });
+        });
+    }
+    function registerMoreRouter() {
+        app.use(multipart({ uploadDir: "upload-files" }));
+        router.get("/more/get", function (req, res) {
+            res.json(req.cookies);
+        });
+        router.post("more/upload", function (req, res) {
+            console.log(req.body);
+            res.end("upload success!");
         });
     }
 }

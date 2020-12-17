@@ -61,19 +61,22 @@ export function buildURL(url: string, params?: object): string {
 	return url;
 }
 
-const urlParsingNode = document.createElement("a");
-const currentOrigin = resolveURL(window.location.href);
+/*********** XSRF/CSRF相关 begin  ***************/
 interface URLOrigin {
 	protocol: string;
 	host: string;
 }
 
+const currentOrigin = resolveURL(window.location.href);
+
 /** 获取当前url的protocol & host(借助于a标签的自动解析)
  * @param url 网址
  */
 function resolveURL(url: string): URLOrigin {
+	const urlParsingNode = document.createElement("a");
 	urlParsingNode.setAttribute("href", url);
 	const { protocol, host } = urlParsingNode;
+	urlParsingNode.remove();
 	return { protocol, host };
 }
 /** 是否是同域请求(parsedOrigin vs currentOrigin)
@@ -83,3 +86,4 @@ export function isURLSameOrigin(requestURL: string): boolean {
 	const parsedOrigin = resolveURL(requestURL);
 	return parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host;
 }
+/*********** XSRF/CSRF相关 end  ***************/

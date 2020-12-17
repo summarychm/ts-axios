@@ -15,6 +15,7 @@
   - [x] 支持请求的取消(基于 promise 分离 code)
   - [x] 跨域携带 cookie xhr.withCredentials
   - [x] XSRF: header 自动添加 token 键值对
+  - [x] 支持上传/下载进度回调
 - [x] 使用 TS 配置 webpackConfig,
   - [x] 使用 tsc 先编译 webpack.config.ts,
   - [x] 再运行 webpack-dev-server

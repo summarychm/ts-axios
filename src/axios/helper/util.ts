@@ -8,6 +8,10 @@ export function isPlainObject(val: any): val is Object {
 	return toString.call(val) === "[object Object]";
 }
 
+export function isFormData(val: any): val is FormData {
+	return typeof val !== "undefined" && val instanceof FormData;
+}
+
 /** 将form自身及其原型上的属性和方法拷贝到to上
  * @param to 接收方
  * @param form 发送方

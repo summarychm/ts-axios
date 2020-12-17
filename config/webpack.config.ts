@@ -6,10 +6,13 @@ import { apiRouter } from "./apiRouter";
 
 const config: Configuration = {
 	mode: "development",
-	entry: "./src/index.ts",
+	entry: {
+		main: "./src/index.ts",
+		upload: "./src/index.ts",
+	},
 	output: {
 		path: path.resolve(__dirname, "dist"),
-		filename: "bundle.[hash:8].js",
+		filename: "[name].[hash:8].js",
 	},
 	context: __dirname,
 	devtool: "inline-source-map",
@@ -25,6 +28,8 @@ const config: Configuration = {
 		// 		changeOrigin: true, // 改变主机的host,避免服务器验证不通过.
 		// 	},
 		// },
+
+		// 基于wds的before所暴露出来的express实例为测试提供数据接口
 		before(app) {
 			apiRouter(app);
 		},
@@ -48,13 +53,25 @@ const config: Configuration = {
 				],
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.css$/,
+				use: ["style-loader", "css-loader"],
+			},
 		],
 	},
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
+
 		new HtmlWebpackPlugin({
-			title: "ts-axios",
+			filename: "upload.html",
+			title: "upload+download",
+			template: "./public/uploadOrdownload.html",
+			chunks: ["upload"],
+		}),
+		new HtmlWebpackPlugin({
+			title: "ts-Axios",
 			template: "./public/template.html",
+			chunks: ["main"],
 		}),
 	],
 };

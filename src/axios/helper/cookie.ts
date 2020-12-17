@@ -1,6 +1,6 @@
 const cookie = {
 	/**
-	 * 读取指定name的cookie
+	 * 读取指定name的cookie(通过正则分组获取指定name的cookie)
 	 * @param name cookieName
 	 */
 	read(name: string): string | null {

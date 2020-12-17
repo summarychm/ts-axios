@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>测试上传下载功能</title>
+		<link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+		<style>
+			body {
+				padding: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<h1>file download</h1>
+		<div>
+			<button id="download" class="btn btn-promary">Download</button>
+		</div>
+		<h1>file upload</h1>
+		<form role="form" class="form" onsubmit="return false;">
+			<input id="file" type="file" class="form-control" />
+			<input type="button" value="Upload" id="upload" class="btn btn-primary" />
+		</form>
+	</body>
+</html>
