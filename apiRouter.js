@@ -28,6 +28,7 @@ function apiRouter(app) {
     registerXsrf();
     registerMoreRouter();
     registerAuthorization();
+    registerSStatusCodeTest();
     function registerSimpleRouter() {
         router.get("/simple/get", function (req, res) {
             res.json({
@@ -164,6 +165,12 @@ function apiRouter(app) {
                 res.status(401);
                 res.end("UnAuthorization");
             }
+        });
+    }
+    function registerSStatusCodeTest() {
+        router.get("/more/304", function (req, res) {
+            res.status(304);
+            res.end("status: 304");
         });
     }
 }

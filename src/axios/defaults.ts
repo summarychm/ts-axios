@@ -22,6 +22,7 @@ const defaults: AxiosRequestConfig = {
 	transformResponse: [(data: any): any => transformResponseData(data)],
 	xsrfCookieName: "XSRF-TOKEN",
 	xsrfHeaderName: "X-XSRF-TOKEN",
+	validateStatus: (status) => status >= 200 && status < 300,
 };
 
 // 以下几种请求无需添加额外的headers

@@ -22,6 +22,7 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 			onDownloadProgress,
 			onUploadProgress,
 			auth,
+			validateStatus,
 		} = config;
 		const request = new XMLHttpRequest();
 
@@ -35,19 +36,9 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 		/** 构造response(Promise版)
 		 * @param request request对象
 		 */
-		function handleResponse(request: XMLHttpRequest) {
-			const responseHeaders = request.getAllResponseHeaders();
-			const responseData = responseType && responseType !== "text" ? request.response : request.responseText;
-			// 基于原生request构造AxiosResponse
-			const response: AxiosResponse = {
-				data: responseData,
-				status: request.status,
-				statusText: request.statusText,
-				headers: parseHeaders(responseHeaders),
-				config,
-				request,
-			};
-			if (response.status >= 200 && response.status < 300) resolve(response);
+		function handleResponse(response: AxiosResponse) {
+			// 支持自定义合法状态码
+			if (!validateStatus || validateStatus(response.status)) resolve(response);
 			else reject(createError(`Request failed with status code ${response.status}`, config, null, request, response));
 		}
 		/** 为request添加默认配置
@@ -66,7 +57,19 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 			request.onreadystatechange = () => {
 				if (request.readyState !== 4) return;
 				if (request.status === 0) return;
-				handleResponse(request);
+				const responseHeaders = request.getAllResponseHeaders();
+				const responseData = responseType && responseType !== "text" ? request.response : request.responseText;
+				// 基于原生request构造AxiosResponse
+				const response: AxiosResponse = {
+					data: responseData,
+					status: request.status,
+					statusText: request.statusText,
+					headers: parseHeaders(responseHeaders),
+					config,
+					request,
+				};
+
+				handleResponse(response);
 			};
 		}
 		/** 扩展requestHeader(如自动设置content-type和添加xsrfToken) */

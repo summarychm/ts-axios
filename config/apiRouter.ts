@@ -37,6 +37,7 @@ export function apiRouter(app: Router) {
 
 	registerMoreRouter();
 	registerAuthorization();
+	registerSStatusCodeTest();
 
 	function registerSimpleRouter() {
 		router.get("/simple/get", function (req, res) {
@@ -190,6 +191,13 @@ export function apiRouter(app: Router) {
 				res.status(401);
 				res.end("UnAuthorization");
 			}
+		});
+	}
+
+	function registerSStatusCodeTest() {
+		router.get("/more/304", (req: Request, res: Response) => {
+			res.status(304);
+			res.end("status: 304");
 		});
 	}
 }

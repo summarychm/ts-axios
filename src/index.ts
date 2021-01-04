@@ -20,7 +20,8 @@ console.log("---axios test begin--");
 // withCredentialsTest();
 // xsrfTest();
 // uploadTest();
-authorizationTest();
+// authorizationTest();
+statusCodeTest();
 
 function paramsTest() {
 	axios({
@@ -533,4 +534,14 @@ function uploadTest() {
 }
 function authorizationTest() {
 	axios.post("/more/post", { a: 1 }, { auth: { username: "Jack", password: "test" } }).then(console.log);
+}
+function statusCodeTest() {
+	axios
+		.get("/more/304")
+		.then(console.log)
+		.catch((e: AxiosError) => console.error(e.message));
+	axios
+		.get("/more/304", { validateStatus: (status) => status >= 200 && status < 400 })
+		.then(console.log)
+		.catch((e: AxiosError) => console.error(e.message));
 }
