@@ -38,7 +38,7 @@ stratKeyFromVal2.forEach((key) => {
 	strats[key] = fromVal2Strat;
 });
 
-const stratKeyDeepMerge = ["headers"]; // 指定需要使用策略3的key
+const stratKeyDeepMerge = ["headers", "auth"]; // 指定需要使用策略3的key
 stratKeyDeepMerge.forEach((key) => {
 	strats[key] = deepMergeStrat;
 });

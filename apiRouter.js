@@ -3,7 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var atob_1 = __importDefault(require("atob"));
 var body_parser_1 = __importDefault(require("body-parser"));
+//TODO 这里引入自己编写的d.ts文件总是出错,暂改为require方式
 // import multipart from "connect-multiparty";
 var multipart = require("connect-multiparty");
 function apiRouter(app) {
@@ -25,6 +27,7 @@ function apiRouter(app) {
     registerWithCredentials();
     registerXsrf();
     registerMoreRouter();
+    registerAuthorization();
     function registerSimpleRouter() {
         router.get("/simple/get", function (req, res) {
             res.json({
@@ -144,9 +147,23 @@ function apiRouter(app) {
         router.get("/more/get", function (req, res) {
             res.json(req.cookies);
         });
-        router.post("more/upload", function (req, res) {
+        router.post("/more/upload", function (req, res) {
             console.log(req.body);
             res.end("upload success!");
+        });
+    }
+    function registerAuthorization() {
+        router.post("/more/post", function (req, res) {
+            var auth = req.headers.authorization || "";
+            var _a = auth.split(" "), type = _a[0], credentials = _a[1];
+            var _b = atob_1.default(credentials).split(":"), username = _b[0], password = _b[1];
+            if (type === "Basic" && username === "Jack" && password === "test") {
+                res.json(req.body);
+            }
+            else {
+                res.status(401);
+                res.end("UnAuthorization");
+            }
         });
     }
 }

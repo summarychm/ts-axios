@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import atob from "atob";
 import bodyParser from "body-parser";
 
 //TODO 这里引入自己编写的d.ts文件总是出错,暂改为require方式
@@ -35,6 +36,7 @@ export function apiRouter(app: Router) {
 	registerXsrf();
 
 	registerMoreRouter();
+	registerAuthorization();
 
 	function registerSimpleRouter() {
 		router.get("/simple/get", function (req, res) {
@@ -172,9 +174,22 @@ export function apiRouter(app: Router) {
 			res.json(req.cookies);
 		});
 
-		router.post("more/upload", function (req, res) {
+		router.post("/more/upload", function (req, res) {
 			console.log(req.body);
 			res.end("upload success!");
+		});
+	}
+	function registerAuthorization() {
+		router.post("/more/post", function (req: Request, res: Response) {
+			const auth = req.headers.authorization || "";
+			const [type, credentials] = auth.split(" ");
+			const [username, password] = atob(credentials).split(":");
+			if (type === "Basic" && username === "Jack" && password === "test") {
+				res.json(req.body);
+			} else {
+				res.status(401);
+				res.end("UnAuthorization");
+			}
 		});
 	}
 }

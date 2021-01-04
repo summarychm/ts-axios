@@ -18,8 +18,9 @@ console.log("---axios test begin--");
 // axiosCreateTest();
 // cancelTokenTest();
 // withCredentialsTest();
-xsrfTest();
-uploadTest();
+// xsrfTest();
+// uploadTest();
+authorizationTest();
 
 function paramsTest() {
 	axios({
@@ -529,4 +530,7 @@ function uploadTest() {
 				instance.post("/more/upload", data);
 			}
 		});
+}
+function authorizationTest() {
+	axios.post("/more/post", { a: 1 }, { auth: { username: "Jack", password: "test" } }).then(console.log);
 }

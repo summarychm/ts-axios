@@ -26,6 +26,8 @@ export interface AxiosRequestConfig {
 	onDownloadProgress?: (e: ProgressEvent) => void;
 	// 上传进度
 	onUploadProgress?: (e: ProgressEvent) => void;
+	auth?: AxiosBasicCredentials;
+	// [propName: string]: any;
 }
 export interface AxiosResponse<T = any> {
 	data: T;
@@ -138,3 +140,9 @@ export interface CancelStatic {
 }
 
 /************* CancelToken end  ********/
+
+// Authorization
+export interface AxiosBasicCredentials {
+	username: string;
+	password: string;
+}

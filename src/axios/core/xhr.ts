@@ -21,6 +21,7 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 			xsrfHeaderName,
 			onDownloadProgress,
 			onUploadProgress,
+			auth,
 		} = config;
 		const request = new XMLHttpRequest();
 
@@ -74,6 +75,9 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 			if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
 				const xsrfValue = cookie.read(xsrfCookieName);
 				if (xsrfValue) headers[xsrfHeaderName] = xsrfValue;
+			}
+			if (auth) {
+				headers["Authorization"] = `Basic ${btoa(`${auth.username}:${auth.password}`)}`;
 			}
 			if (isFormData(data)) delete headers["Content-Type"]; // 删除默认contentType让浏览器自动设置
 			setRequestHeader(headers, data, request); // 更新request的headers
