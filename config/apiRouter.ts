@@ -6,7 +6,7 @@ import bodyParser from "body-parser";
 // import multipart from "connect-multiparty";
 const multipart = require("connect-multiparty");
 
-export function apiRouter(app: Router) {
+export function apiRouter(app: Router): void {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,7 +37,8 @@ export function apiRouter(app: Router) {
 
 	registerMoreRouter();
 	registerAuthorization();
-	registerSStatusCodeTest();
+	registerStatusCodeTest();
+	registerStaticFunctionTest();
 
 	function registerSimpleRouter() {
 		router.get("/simple/get", function (req, res) {
@@ -194,10 +195,20 @@ export function apiRouter(app: Router) {
 		});
 	}
 
-	function registerSStatusCodeTest() {
+	function registerStatusCodeTest() {
 		router.get("/more/304", (req: Request, res: Response) => {
 			res.status(304);
 			res.end("status: 304");
+		});
+	}
+
+	function registerStaticFunctionTest() {
+		router.get("/more/A", (req, res) => {
+			res.end("A");
+		});
+
+		router.get("/more/B", (req, res) => {
+			res.end("B");
 		});
 	}
 }

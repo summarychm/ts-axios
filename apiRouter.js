@@ -28,7 +28,8 @@ function apiRouter(app) {
     registerXsrf();
     registerMoreRouter();
     registerAuthorization();
-    registerSStatusCodeTest();
+    registerStatusCodeTest();
+    registerStaticFunctionTest();
     function registerSimpleRouter() {
         router.get("/simple/get", function (req, res) {
             res.json({
@@ -167,10 +168,18 @@ function apiRouter(app) {
             }
         });
     }
-    function registerSStatusCodeTest() {
+    function registerStatusCodeTest() {
         router.get("/more/304", function (req, res) {
             res.status(304);
             res.end("status: 304");
+        });
+    }
+    function registerStaticFunctionTest() {
+        router.get("/more/A", function (req, res) {
+            res.end("A");
+        });
+        router.get("/more/B", function (req, res) {
+            res.end("B");
         });
     }
 }

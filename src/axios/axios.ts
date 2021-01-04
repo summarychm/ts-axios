@@ -31,4 +31,14 @@ axios.CancelToken = CancelToken;
 axios.Cancel = Cancel; // cancelMessage类
 axios.isCancel = isCancel; // 是否是cancelMessage类实例
 
+axios.all = function all(promises) {
+	return Promise.all(promises);
+};
+axios.spread = function spread(callback) {
+	return function wrap(arr) {
+		return callback.apply(null, arr);
+	};
+};
+axios.Axios = Axios;
+
 export default axios;

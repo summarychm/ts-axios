@@ -26,7 +26,7 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 		} = config;
 		const request = new XMLHttpRequest();
 
-		request.open(method.toUpperCase(), url, true);
+		request.open(method.toUpperCase(), url!, true);
 		configureRequest();
 		addEvents();
 		processHeaders();
@@ -75,9 +75,9 @@ export function xhr(config: AxiosRequestConfig): AxiosPromise {
 		/** 扩展requestHeader(如自动设置content-type和添加xsrfToken) */
 		function processHeaders(): void {
 			// xsrf 跨域自动为 header 添加 token 键值对
-			if ((withCredentials || isURLSameOrigin(url)) && xsrfCookieName) {
+			if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
 				const xsrfValue = cookie.read(xsrfCookieName);
-				if (xsrfValue) headers[xsrfHeaderName] = xsrfValue;
+				if (xsrfValue && xsrfHeaderName) headers[xsrfHeaderName] = xsrfValue;
 			}
 			if (auth) {
 				headers["Authorization"] = `Basic ${btoa(`${auth.username}:${auth.password}`)}`;
