@@ -24,6 +24,7 @@ console.log("---axios test begin--");
 // statusCodeTest();
 // paramsSerializerTest();
 baseURLTest();
+staticFunctionTest();
 
 function paramsTest() {
 	axios({
@@ -586,4 +587,32 @@ function baseURLTest() {
 	});
 	instance.get("5cc01a7b0001a33718720632.jpg");
 	instance.get("https://img.mukewang.com/5cc01a7b0001a33718720632.jpg");
+}
+
+function staticFunctionTest() {
+	const getA = () => axios.get("/more/A");
+	const getB = () => axios.get("/more/B");
+
+	axios.all([getA(), getB()]).then(
+		axios.spread((resA, resB) => {
+			console.log(resA.data);
+			console.log(resB.data);
+		}),
+	);
+
+	axios.all([getA(), getB()]).then(([resA, resB]) => {
+		console.log(resA.data);
+		console.log(resB.data);
+	});
+
+	const fakeConfig = {
+		baseURL: "https://www.baidu.com/",
+		url: "/user/12345",
+		params: {
+			idClient: 1,
+			idTest: 2,
+			testString: "thisIsTest",
+		},
+	};
+	console.log(axios.getUri(fakeConfig));
 }

@@ -50,7 +50,7 @@ export interface AxiosError extends Error {
 }
 export type AxiosPromise<T = any> = Promise<AxiosResponse<T>>;
 
-/** Axios的公共方法类 */
+/** Axios的公共方法 */
 export interface Axios {
 	interceptors: {
 		request: AxiosInterceptorManager<AxiosRequestConfig>;
@@ -66,6 +66,8 @@ export interface Axios {
 	post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
 	put<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
 	patch<T = any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>;
+	// 根据config获取uri(不产生真实请求)
+	getUri(config?: AxiosRequestConfig): string;
 }
 /** axios混合对象接口(支持axios(config),axios(url,config).axios.get(config)等多种调用方法)
  */
@@ -74,18 +76,30 @@ export interface AxiosInstance extends Axios {
 	// 函数重载,为axios混合类型添加新的定义,需调整Axios下的request方法
 	<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
 }
+
 /** Axios实例接口 */
 export interface AxiosStatic extends AxiosInstance {
 	/** CancelToken的类类型 */
 	CancelToken: CancelTokenStatic;
 	/** CancelToken实例 */
 	Cancel: CancelStatic;
+	Axios: AxiosClassStatic;
 	/** 判断是否是Cancel类实例 */
 	isCancel: (value: any) => boolean;
 	/** 创建新的axios实例
 	 * @param config 新axios的配置参数
 	 */
 	create(config?: AxiosRequestConfig): AxiosInstance;
+
+	// axios.all
+	all<T>(promises: Array<T | Promise<T>>): Promise<T[]>;
+	// axios.spread
+	spread<T, R>(callback: (...arg: T[]) => R): (arr: T[]) => R;
+}
+
+/** Axios实例类型,供axios.Axios的方式调用 */
+export interface AxiosClassStatic {
+	new (config: AxiosRequestConfig): Axios;
 }
 
 /**  transformResquest/transformResponse接口 */
