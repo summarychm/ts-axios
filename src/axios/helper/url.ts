@@ -103,3 +103,13 @@ export function isURLSameOrigin(requestURL: string): boolean {
 	return parsedOrigin.protocol === currentOrigin.protocol && parsedOrigin.host === currentOrigin.host;
 }
 /*********** XSRF/CSRF相关 end  ***************/
+
+/** 是否是绝对地址 */
+export function isAbsoluteURL(url: string): boolean {
+	return /(^[a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+}
+
+/** 整合相对地址与baseURL */
+export function combineURL(baseURL: string, relativeURL?: string): string {
+	return relativeURL ? `${baseURL.replace(/\/+$/, "")}/${relativeURL.replace(/^\/+/, "")}` : baseURL;
+}

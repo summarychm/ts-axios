@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from "../types/index";
 import { xhr } from "./xhr";
-import { buildURL } from "../helper/url";
+import { buildURL, combineURL, isAbsoluteURL } from "../helper/url";
 import { flatterHeaders } from "../helper/headers";
 import transformRequestOrResponse from "./transform";
 
@@ -26,7 +26,10 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param config axiosConfig对象
  */
 function transformURL(config: AxiosRequestConfig): string {
-	const { url, params, paramsSerializer } = config;
+	let { url, params, paramsSerializer, baseURL } = config;
+	if (baseURL && !isAbsoluteURL(url)) {
+		url = combineURL(baseURL, url);
+	}
 	return buildURL(url!, params, paramsSerializer); // 这里的URL为必传
 }
 

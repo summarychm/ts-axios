@@ -22,7 +22,8 @@ console.log("---axios test begin--");
 // uploadTest();
 // authorizationTest();
 // statusCodeTest();
-paramsSerializerTest();
+// paramsSerializerTest();
+baseURLTest();
 
 function paramsTest() {
 	axios({
@@ -577,4 +578,12 @@ function paramsSerializerTest() {
 			},
 		})
 		.then(console.log);
+}
+
+function baseURLTest() {
+	const instance = axios.create({
+		baseURL: "https://img.mukewang.com",
+	});
+	instance.get("5cc01a7b0001a33718720632.jpg");
+	instance.get("https://img.mukewang.com/5cc01a7b0001a33718720632.jpg");
 }
