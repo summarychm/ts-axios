@@ -26,8 +26,8 @@ function processConfig(config: AxiosRequestConfig): void {
  * @param config axiosConfig对象
  */
 function transformURL(config: AxiosRequestConfig): string {
-	const { url, params = {} } = config;
-	return buildURL(url!, params); // 这里的URL为必传
+	const { url, params, paramsSerializer } = config;
+	return buildURL(url!, params, paramsSerializer); // 这里的URL为必传
 }
 
 /** 规范化 AxiosResponse

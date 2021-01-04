@@ -21,7 +21,8 @@ console.log("---axios test begin--");
 // xsrfTest();
 // uploadTest();
 // authorizationTest();
-statusCodeTest();
+// statusCodeTest();
+paramsSerializerTest();
 
 function paramsTest() {
 	axios({
@@ -544,4 +545,36 @@ function statusCodeTest() {
 		.get("/more/304", { validateStatus: (status) => status >= 200 && status < 400 })
 		.then(console.log)
 		.catch((e: AxiosError) => console.error(e.message));
+}
+function paramsSerializerTest() {
+	axios
+		.get("/more/get", {
+			params: new URLSearchParams("a=b&b=c"),
+		})
+		.then(console.log);
+
+	axios
+		.get("/more/get", {
+			params: {
+				a: 1,
+				b: 2,
+				c: ["c1", "c2", "c3"],
+			},
+		})
+		.then(console.log);
+
+	const instance = axios.create({
+		paramsSerializer: (params) => {
+			return qs.stringify(params, { arrayFormat: "brackets" });
+		},
+	});
+	instance
+		.get("/more/get", {
+			params: {
+				a: 1,
+				b: 2,
+				c: ["c1", "c2", "c3"],
+			},
+		})
+		.then(console.log);
 }

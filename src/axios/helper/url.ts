@@ -1,4 +1,5 @@
-import { isDate, isPlainObject } from "./util";
+import { AxiosRequestConfig } from "../types";
+import { isDate, isPlainObject, isURLSearchParams } from "./util";
 
 const tools = {
 	/**
@@ -46,18 +47,33 @@ const tools = {
  * @param url url地址
  * @param params 请求参数集合
  */
-export function buildURL(url: string, params?: object): string {
+export function buildURL(url: string, params?: object, paramsSerializer?: AxiosRequestConfig["paramsSerializer"]): string {
 	if (!params) return url;
+	let serializedParams;
+	if (paramsSerializer) {
+		// 自定义序列化器
+		serializedParams = paramsSerializer(params);
+	} else if (isURLSearchParams(params)) {
+		// params是UrlSearchParams实例
+		serializedParams = params.toString();
+	} else {
+		const parts: string[] = tools.buildParams(params);
+		if (!parts.length) return url;
 
-	const parts: string[] = tools.buildParams(params);
-	if (!parts.length) return url;
-
-	// 删除url锚点 删除#哈希标记
-	const markIndex = url.indexOf("#");
-	// TODO 这里应该处理既包含锚点又包含默认参数的情况
-	if (markIndex !== -1) url = url.slice(0, markIndex);
-
-	url += url.includes("?") ? "&" : "?" + parts.join("&");
+		serializedParams = parts.join("&");
+	}
+	if (serializedParams) {
+		// 删除url锚点 删除#哈希标记
+		const markIndex = url.indexOf("#");
+		if (markIndex !== -1) {
+			let params = ""; // 处理既包含锚点又包含url参数的情况
+			if (url.indexOf("?")) {
+				params = url.slice(url.indexOf("?"));
+			}
+			url = url.slice(0, markIndex) + params;
+		}
+	}
+	url += url.includes("?") ? "&" : "?" + serializedParams;
 	return url;
 }
 
