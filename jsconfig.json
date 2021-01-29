@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["./src/axios/*"]
+		}
+	},
+	"exclude": ["node_modules", "dist"]
+}
